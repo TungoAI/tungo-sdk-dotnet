@@ -6,6 +6,16 @@
     <PackageId>Tungo.Sdk</PackageId>
     <Version>0.1.0</Version>
     <Authors>Tungo AI</Authors>
-    <Description>Официальный .NET SDK для публичного API платформы Tungo AI</Description>
+    <Company>Tungo AI</Company>
+    <Description>Official .NET SDK for Tungo AI Platform API (1C AI Accountant, Automations, Webhooks)</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://tungo.kz</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TungoAI/tungo-sdk-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>tungo;tungo-ai;1c;accounting;kazakhstan;sdk;api</PackageTags>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
