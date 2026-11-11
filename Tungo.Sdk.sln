@@ -1,0 +1,52 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7A0C3E10-52B4-4C7E-9A01-000000000001}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7A0C3E10-52B4-4C7E-9A01-000000000002}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{7A0C3E10-52B4-4C7E-9A01-000000000003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tungo.Sdk", "src\Tungo.Sdk\Tungo.Sdk.csproj", "{7A0C3E10-52B4-4C7E-9A01-000000000011}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tungo.Sdk.Tests", "tests\Tungo.Sdk.Tests\Tungo.Sdk.Tests.csproj", "{7A0C3E10-52B4-4C7E-9A01-000000000012}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tungo.Sdk.NetStandard.Tests", "tests\Tungo.Sdk.NetStandard.Tests\Tungo.Sdk.NetStandard.Tests.csproj", "{7A0C3E10-52B4-4C7E-9A01-000000000013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tungo.Sdk.Examples", "examples\Tungo.Sdk.Examples\Tungo.Sdk.Examples.csproj", "{7A0C3E10-52B4-4C7E-9A01-000000000014}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A0C3E10-52B4-4C7E-9A01-000000000011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0C3E10-52B4-4C7E-9A01-000000000014}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A0C3E10-52B4-4C7E-9A01-000000000011} = {7A0C3E10-52B4-4C7E-9A01-000000000001}
+		{7A0C3E10-52B4-4C7E-9A01-000000000012} = {7A0C3E10-52B4-4C7E-9A01-000000000002}
+		{7A0C3E10-52B4-4C7E-9A01-000000000013} = {7A0C3E10-52B4-4C7E-9A01-000000000002}
+		{7A0C3E10-52B4-4C7E-9A01-000000000014} = {7A0C3E10-52B4-4C7E-9A01-000000000003}
+	EndGlobalSection
+EndGlobal
