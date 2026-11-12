@@ -489,15 +489,45 @@ public sealed class ConformanceTests
     }
 
     [Fact]
+    public async Task ChatStreamReplayThatIsNotAReplayIsADecodeError()
+    {
+        var cases = Vectors.Cases("chat_stream_replay").Where(item => Vectors.Flag(item.GetProperty("expect"), "decode_error")).ToList();
+        await Vectors.ForEachAsync(cases, async item =>
+        {
+            var headers = Vectors.Headers(item).Select(header => (header.Key, header.Value)).ToArray();
+            var status = item.GetProperty("status").GetInt32();
+            using var client = Sdk.Client(new StubHandler().Json(item.GetProperty("body").GetRawText(), status, headers));
+            var stream = client.Chat.CreateStreamAsync(new ChatMessageRequest { Message = "question" });
+            var error = await Assert.ThrowsAsync<TungoDecodeException>(() => stream.ToChatTurnAsync());
+            Assert.Equal(status, error.StatusCode);
+        });
+    }
+
+    [Fact]
     public async Task ChatStream()
     {
-        await Vectors.ForEachAsync(Vectors.Cases("chat_stream"), async item =>
+        // A turn repeated with the same Idempotency-Key after it finished is answered with its stored JSON result
+        // (chat_stream_replay): the stream must yield the same turn as the vector expects.
+        var cases = Vectors.Cases("chat_stream")
+            .Concat(Vectors.Cases("chat_stream_replay").Where(item => !Vectors.Flag(item.GetProperty("expect"), "decode_error")))
+            .ToList();
+        await Vectors.ForEachAsync(cases, async item =>
         {
             var expect = item.GetProperty("expect");
             var headers = Vectors.Headers(item).Select(header => (header.Key, header.Value)).ToArray();
-            var raw = item.GetProperty("raw").GetString()!;
+            var handler = new StubHandler();
+            if (item.TryGetProperty("raw", out var rawElement))
+            {
+                var raw = rawElement.GetString()!;
+                handler.Sse(raw, headers).Sse(raw, headers);
+            }
+            else
+            {
+                var body = item.GetProperty("body").GetRawText();
+                var status = item.GetProperty("status").GetInt32();
+                handler.Json(body, status, headers).Json(body, status, headers);
+            }
 
-            var handler = new StubHandler().Sse(raw, headers).Sse(raw, headers);
             using var client = Sdk.Client(handler);
             var accumulator = new ChatAccumulator();
             var stream = client.Chat.CreateStreamAsync(new ChatMessageRequest { Message = "question" });
