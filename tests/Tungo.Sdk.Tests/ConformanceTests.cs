@@ -335,8 +335,19 @@ public sealed class ConformanceTests
                 DelayAsync = (_, _) => Task.CompletedTask,
             };
             using var transport = new TungoTransport(options, Sdk.ApiKey, new Uri("https://api.test"));
-            var request = new TungoRequest(new HttpMethod(item.GetProperty("method").GetString()!), "/v1/things", "/v1/things", TungoAuth.ApiKey);
-            var requestOptions = new RequestOptions { IdempotencyKey = item.GetProperty("idempotency_key").GetBoolean() ? "key-1" : null };
+            // idempotency_key: the operation declares the header and the request carries a key;
+            // caller_key: the caller gives a key to an operation that declares none.
+            var declared = item.GetProperty("idempotency_key").GetBoolean();
+            var callerKey = Vectors.Flag(item, "caller_key");
+            var request = new TungoRequest(new HttpMethod(item.GetProperty("method").GetString()!), "/v1/things", "/v1/things", TungoAuth.ApiKey)
+            {
+                IdempotencyHeader = declared ? "Idempotency-Key" : null,
+            };
+            var requestOptions = new RequestOptions
+            {
+                IdempotencyKey = declared || callerKey ? "key-1" : null,
+                Headers = callerKey ? new Dictionary<string, string> { ["Idempotency-Key"] = "key-2" } : null,
+            };
             var retried = item.GetProperty("expect").GetProperty("retry").GetBoolean();
             if (retried)
             {
@@ -348,6 +359,7 @@ public sealed class ConformanceTests
             }
 
             Assert.Equal(retried ? 2 : 1, handler.Requests.Count);
+            Assert.Equal(declared, handler.Requests[0].Header("Idempotency-Key") is not null);
         });
     }
 

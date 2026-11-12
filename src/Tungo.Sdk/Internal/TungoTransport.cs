@@ -189,7 +189,9 @@ internal sealed class TungoTransport : IDisposable
             throw new TungoValidationException("MaxRetries must not be negative.");
         }
 
-        var idempotencyKey = options?.IdempotencyKey;
+        // A key goes only to an operation that declares the header: anywhere else the API ignores
+        // it, and sending it would make a retry look safe when it repeats the action.
+        var idempotencyKey = request.IdempotencyHeader is not null ? options?.IdempotencyKey : null;
         if (idempotencyKey is null && request.IdempotencyHeader is not null)
         {
             idempotencyKey = string.IsNullOrEmpty(request.DefaultIdempotencyKey) ? IdempotencyKeys.New() : request.DefaultIdempotencyKey;
@@ -317,7 +319,7 @@ internal sealed class TungoTransport : IDisposable
             foreach (var header in _defaultHeaders)
             {
                 // A default credential header must not leak to public endpoints and hooks.
-                if (request.Auth != TungoAuth.ApiKey && IsCredentialHeader(header.Key))
+                if ((request.Auth != TungoAuth.ApiKey && IsCredentialHeader(header.Key)) || IsUndeclaredKey(request, header.Key))
                 {
                     continue;
                 }
@@ -346,6 +348,11 @@ internal sealed class TungoTransport : IDisposable
             {
                 foreach (var header in options.Headers)
                 {
+                    if (IsUndeclaredKey(request, header.Key))
+                    {
+                        continue;
+                    }
+
                     SetHeader(message, header.Key, header.Value);
                 }
             }
@@ -357,6 +364,11 @@ internal sealed class TungoTransport : IDisposable
             message.Dispose();
             throw;
         }
+    }
+
+    private static bool IsUndeclaredKey(TungoRequest request, string name)
+    {
+        return request.IdempotencyHeader is null && string.Equals(name, "Idempotency-Key", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsCredentialHeader(string name)

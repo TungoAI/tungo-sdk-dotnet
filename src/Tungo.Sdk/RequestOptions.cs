@@ -13,7 +13,7 @@ public sealed record RequestOptions
     /// <summary>Extra headers of this request; they replace default headers of the same name.</summary>
     public IReadOnlyDictionary<string, string>? Headers { get; init; }
 
-    /// <summary>The <c>Idempotency-Key</c> to send. When not set, the SDK generates one for the operations that declare the header and reuses it for every attempt.</summary>
+    /// <summary>The <c>Idempotency-Key</c> to send to an operation that declares the header. When not set, the SDK generates one and reuses it for every attempt. Other operations send no key, not even this one (the API would ignore it there), and a POST or PATCH among them is never retried.</summary>
     public string? IdempotencyKey { get; init; }
 
     /// <summary>The company to use for this call instead of the client's.</summary>
