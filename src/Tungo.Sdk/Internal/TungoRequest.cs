@@ -37,6 +37,12 @@ internal sealed class TungoRequest
     /// <summary>The name of the idempotency header when the operation declares one.</summary>
     public string? IdempotencyHeader { get; set; }
 
+    /// <summary>
+    /// The key used instead of a random one when the caller gives none: the event id of a hook event,
+    /// because the API reads Idempotency-Key before X-Event-Id.
+    /// </summary>
+    public string? DefaultIdempotencyKey { get; set; }
+
     /// <summary>A non-streaming chat turn: it gets the long default time limit.</summary>
     public bool LongRunning { get; set; }
 

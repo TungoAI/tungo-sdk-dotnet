@@ -92,14 +92,20 @@ public sealed class ClientTests
     [Fact]
     public async Task HookWithoutSecretIsNotSignedAndWorksWithoutApiKey()
     {
-        var handler = new StubHandler().Json(Sdk.HookAcceptedJson);
+        var handler = new StubHandler().Json(Sdk.HookAcceptedJson).Json(Sdk.HookAcceptedJson);
         using var client = Sdk.Client(handler, options => options.ApiKey = null);
         await client.Automations.PostHookAsync("th_token", new byte[] { 1, 2, 3 }, new AutomationsPostHookParams { ContentType = "application/octet-stream", EventId = "evt-7" });
         var request = Assert.Single(handler.Requests);
         Assert.Null(request.Header("X-Signature"));
         Assert.Equal("evt-7", request.Header("X-Event-Id"));
+        // The API reads Idempotency-Key before X-Event-Id: the event id must be the key.
+        Assert.Equal("evt-7", request.Header("Idempotency-Key"));
         Assert.Equal("application/octet-stream", request.Header("Content-Type"));
         Assert.Equal(new byte[] { 1, 2, 3 }, request.Body);
+
+        await client.Automations.PostHookAsync("th_token", new byte[] { 1 }, new AutomationsPostHookParams { EventId = "evt-7" }, new RequestOptions { IdempotencyKey = "own" });
+        Assert.Equal("own", handler.Requests[1].Header("Idempotency-Key"));
+        Assert.Equal("evt-7", handler.Requests[1].Header("X-Event-Id"));
     }
 
     [Fact]

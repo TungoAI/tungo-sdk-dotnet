@@ -19,6 +19,7 @@ public sealed class AutomationsResource
         request.IdempotencyHeader = "Idempotency-Key";
         request.SetRawBody(body, parameters?.ContentType ?? "application/json");
         request.AddHeader("X-Event-Id", parameters?.EventId);
+        request.DefaultIdempotencyKey = parameters?.EventId;
         var signature = parameters?.Signature;
         if (signature is null && parameters?.Secret is { } secret)
         {

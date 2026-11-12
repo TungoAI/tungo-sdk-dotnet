@@ -192,7 +192,7 @@ internal sealed class TungoTransport : IDisposable
         var idempotencyKey = options?.IdempotencyKey;
         if (idempotencyKey is null && request.IdempotencyHeader is not null)
         {
-            idempotencyKey = IdempotencyKeys.New();
+            idempotencyKey = string.IsNullOrEmpty(request.DefaultIdempotencyKey) ? IdempotencyKeys.New() : request.DefaultIdempotencyKey;
         }
 
         var idempotencyHeader = request.IdempotencyHeader ?? "Idempotency-Key";
