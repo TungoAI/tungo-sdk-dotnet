@@ -479,6 +479,38 @@ public sealed class StreamingTests
         using var acceptedToo = new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = winHttpOff });
     }
 
+    [Fact]
+    public void APlatformHandlerWhoseRedirectPropertyCannotBeReadIsRefused()
+    {
+        // Trimming or native AOT can remove the redirect property of AndroidMessageHandler: recognised by its type name, it is then refused, not accepted.
+        using var trimmed = new Xamarin.Android.Net.AndroidMessageHandler();
+        var error = Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = trimmed }));
+        Assert.Contains("Xamarin.Android.Net.AndroidMessageHandler", error.Message, StringComparison.Ordinal);
+        Assert.Contains("TungoClientOptions.HttpClient", error.Message, StringComparison.Ordinal);
+        using var wrapped = new PassThroughHandler { InnerHandler = new Xamarin.Android.Net.AndroidMessageHandler() };
+        Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = wrapped }));
+
+        // A type derived from a platform handler is recognised too, and its readable redirect property decides.
+        using var derivedOn = new DerivedAndroidHandler { AllowAutoRedirect = true };
+        Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = derivedOn }));
+        using var derivedOff = new DerivedAndroidHandler { AllowAutoRedirect = false };
+        using var accepted = new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = derivedOff });
+
+        // A handler of another kind without a redirect property is accepted as it is.
+        using var other = new NoRedirectPropertyHandler();
+        using var acceptedToo = new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = other });
+    }
+
+    private sealed class DerivedAndroidHandler : Xamarin.Android.Net.AndroidMessageHandler
+    {
+        public bool AllowAutoRedirect { get; set; }
+    }
+
+    private sealed class NoRedirectPropertyHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) => throw new NotSupportedException();
+    }
+
     private sealed class AllowAutoRedirectHandler : HttpMessageHandler
     {
         public bool AllowAutoRedirect { get; set; }

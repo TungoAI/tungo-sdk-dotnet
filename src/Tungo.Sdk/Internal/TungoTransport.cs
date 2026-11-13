@@ -52,9 +52,10 @@ internal sealed class TungoTransport : IDisposable
         }
         else if (options.HttpMessageHandler is not null)
         {
-            if (FollowsRedirects(options.HttpMessageHandler))
+            var refusal = RedirectRefusal(options.HttpMessageHandler);
+            if (refusal is not null)
             {
-                throw new TungoConfigurationException("The HTTP handler must not follow redirects: set AllowAutoRedirect = false on it, otherwise a redirect would carry the API key to another host.");
+                throw new TungoConfigurationException(refusal);
             }
 
             _http = new HttpClient(options.HttpMessageHandler, disposeHandler: false) { Timeout = Timeout.InfiniteTimeSpan };
@@ -807,14 +808,16 @@ internal sealed class TungoTransport : IDisposable
     }
 
     /// <summary>
-    /// Whether a caller's handler (or the innermost one of a chain of delegating handlers) is known to follow redirects:
-    /// an <c>HttpClientHandler</c> or <c>SocketsHttpHandler</c> with <c>AllowAutoRedirect</c>, or any other handler whose
-    /// public boolean <c>AllowAutoRedirect</c> or <c>AutomaticRedirection</c> property is true. That covers the platform
-    /// handlers that follow redirects by default (<c>AndroidMessageHandler</c>, <c>NSUrlSessionHandler</c>, <c>WinHttpHandler</c>)
-    /// without a reference to their assemblies.
+    /// Why a caller's handler (or the innermost one of a chain of delegating handlers) is refused, or null when it is accepted.
+    /// <c>HttpClientHandler</c> and <c>SocketsHttpHandler</c> are read with typed code. The platform handlers that follow redirects
+    /// by default (<c>AndroidMessageHandler</c>, <c>NSUrlSessionHandler</c>, <c>CFNetworkHandler</c>, <c>WinHttpHandler</c>) are recognised by
+    /// the full name of their type or of a base type, without a reference to their assemblies, and their redirect property is read
+    /// by reflection: when it cannot be read (trimming or native AOT may remove it), the handler is refused, never assumed safe.
+    /// Any other handler is refused when it has a public boolean <c>AllowAutoRedirect</c> or <c>AutomaticRedirection</c> property that is true.
     /// </summary>
-    private static bool FollowsRedirects(HttpMessageHandler handler)
+    private static string? RedirectRefusal(HttpMessageHandler handler)
     {
+        const string followsRedirects = "The HTTP handler must not follow redirects: set AllowAutoRedirect = false on it, otherwise a redirect would carry the API key to another host.";
         var current = handler;
         while (current is DelegatingHandler { InnerHandler: not null } delegating)
         {
@@ -824,26 +827,95 @@ internal sealed class TungoTransport : IDisposable
 #if NET
         if (current is SocketsHttpHandler sockets)
         {
-            return sockets.AllowAutoRedirect;
+            return sockets.AllowAutoRedirect ? followsRedirects : null;
         }
 #endif
         if (current is HttpClientHandler clientHandler)
         {
-            return clientHandler.AllowAutoRedirect;
+            return clientHandler.AllowAutoRedirect ? followsRedirects : null;
         }
 
-        return RedirectSwitchIsOn(current, "AllowAutoRedirect") || RedirectSwitchIsOn(current, "AutomaticRedirection");
+        var type = HandlerType(current);
+        var platformSwitch = PlatformRedirectSwitch(type);
+        if (platformSwitch is not null)
+        {
+            var on = ReadRedirectSwitch(type, current, platformSwitch);
+            if (on is null)
+            {
+                return "The HTTP handler " + type.FullName + " follows redirects by default and its " + platformSwitch
+                    + " property cannot be read (trimming or native AOT may have removed it), so it is refused: a redirect would carry the API key to another host. "
+                    + "Pass an HttpClient built on it, with " + platformSwitch + " = false, in TungoClientOptions.HttpClient instead.";
+            }
+
+            return on.Value
+                ? "The HTTP handler must not follow redirects: set " + platformSwitch + " = false on it, otherwise a redirect would carry the API key to another host."
+                : null;
+        }
+
+        return ReadRedirectSwitch(type, current, "AllowAutoRedirect") == true || ReadRedirectSwitch(type, current, "AutomaticRedirection") == true
+            ? followsRedirects
+            : null;
     }
 
-    /// <summary>Whether the handler has a public, readable boolean property of that name that is true.</summary>
-#if NET
-    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2075", Justification = "A handler whose redirect property was trimmed away never sets it, so the check reads what the handler itself uses.")]
-#endif
-    private static bool RedirectSwitchIsOn(HttpMessageHandler handler, string name)
+    /// <summary>
+    /// The redirect property of a platform handler that follows redirects by default, when the type or one of its base types is one:
+    /// matched by full name, which trimming keeps, so that a removed property makes the handler refused rather than accepted.
+    /// </summary>
+    private static string? PlatformRedirectSwitch(Type type)
     {
-        var property = handler.GetType().GetProperty(name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-        return property is { CanRead: true } && property.PropertyType == typeof(bool) && property.GetIndexParameters().Length == 0
-            && property.GetValue(handler) is true;
+        for (Type? t = type; t is not null && t != typeof(HttpMessageHandler); t = t.BaseType)
+        {
+            switch (t.FullName)
+            {
+                case "Xamarin.Android.Net.AndroidMessageHandler":
+                case "System.Net.Http.NSUrlSessionHandler":
+                case "Foundation.NSUrlSessionHandler":
+                case "System.Net.Http.CFNetworkHandler":
+                    return "AllowAutoRedirect";
+                case "System.Net.Http.WinHttpHandler":
+                    return "AutomaticRedirection";
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>The runtime type of the handler, the type whose public properties the redirect check reads.</summary>
+#if NET
+    [return: System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2073", Justification = "The properties may be trimmed away: a platform handler whose redirect property cannot be read is refused (fail closed), and a handler of another kind never had its redirect behaviour known to the SDK.")]
+#endif
+    private static Type HandlerType(HttpMessageHandler handler)
+    {
+        return handler.GetType();
+    }
+
+    /// <summary>
+    /// The value of the handler's public, readable, boolean, non-indexed property of that name, or null when there is no such
+    /// property or reading it failed.
+    /// </summary>
+    private static bool? ReadRedirectSwitch(
+#if NET
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+#endif
+        Type type,
+        HttpMessageHandler handler,
+        string name)
+    {
+        try
+        {
+            var property = type.GetProperty(name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (property is not { CanRead: true } || property.PropertyType != typeof(bool) || property.GetIndexParameters().Length != 0)
+            {
+                return null;
+            }
+
+            return property.GetValue(handler) is bool value ? value : null;
+        }
+        catch (Exception e) when (e is System.Reflection.TargetInvocationException or System.Reflection.AmbiguousMatchException or NotSupportedException or MemberAccessException or InvalidOperationException)
+        {
+            return null;
+        }
     }
 
 #if NET
