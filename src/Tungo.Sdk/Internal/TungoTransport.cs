@@ -409,7 +409,9 @@ internal sealed class TungoTransport : IDisposable
         var idempotencyKey = request.IdempotencyHeader is not null ? options?.IdempotencyKey : null;
         if (idempotencyKey is null && request.IdempotencyHeader is not null)
         {
-            idempotencyKey = string.IsNullOrEmpty(request.DefaultIdempotencyKey) ? IdempotencyKeys.New() : request.DefaultIdempotencyKey;
+            idempotencyKey = string.IsNullOrEmpty(request.DefaultIdempotencyKey)
+                ? BodyIdempotencyKey(request) ?? IdempotencyKeys.New()
+                : request.DefaultIdempotencyKey;
         }
 
         var idempotencyHeader = request.IdempotencyHeader ?? "Idempotency-Key";
@@ -517,6 +519,48 @@ internal sealed class TungoTransport : IDisposable
         {
             throw new TungoConfigurationException(
                 "No API key is configured: set TungoClientOptions.ApiKey or the TUNGO_API_KEY environment variable. No request was sent.");
+        }
+    }
+
+    /// <summary>
+    /// The <c>idempotency_key</c> field of a JSON object body (approving a proposal documents it as the
+    /// same as the header), trimmed like the API trims it. The API prefers the header over the field,
+    /// so a generated header would make the caller's own key useless. A key that cannot travel in a
+    /// header (outside printable ASCII) is ignored here.
+    /// </summary>
+    internal static string? BodyIdempotencyKey(TungoRequest request)
+    {
+        if (request.Body is not { Length: > 0 } body
+            || request.ContentType is not { } contentType
+            || !contentType.StartsWith("application/json", StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        try
+        {
+            using var document = JsonDocument.Parse(body);
+            if (document.RootElement.ValueKind != JsonValueKind.Object
+                || !document.RootElement.TryGetProperty("idempotency_key", out var value)
+                || value.ValueKind != JsonValueKind.String)
+            {
+                return null;
+            }
+
+            var key = value.GetString()!.Trim();
+            foreach (var c in key)
+            {
+                if (c < 0x20 || c > 0x7E)
+                {
+                    return null;
+                }
+            }
+
+            return key.Length == 0 ? null : key;
+        }
+        catch (JsonException)
+        {
+            return null;
         }
     }
 
