@@ -562,6 +562,18 @@ public sealed class ConformanceTests
                 Assert.Equal(types.EnumerateArray().Select(type => type.GetString()), turn.Events.Select(chatEvent => chatEvent.Type));
             }
 
+            if (expect.TryGetProperty("next", out var next))
+            {
+                var nextEvent = Assert.Single(turn.Events.Where(chatEvent => chatEvent.Type == "next"));
+                var written = JsonNode.Parse(JsonSerializer.Serialize(nextEvent, TungoJsonContext.Shared.ChatEvent))!.AsObject();
+                var got = new System.Text.Json.Nodes.JsonObject
+                {
+                    ["followups"] = written["followups"]?.DeepClone(),
+                    ["action"] = written["action"]?.DeepClone(),
+                };
+                Assert.True(JsonNode.DeepEquals(JsonNode.Parse(next.GetRawText()), got), got.ToJsonString());
+            }
+
             // The helper reads the whole stream and raises the error event as the typed exception.
             var helper = client.Chat.CreateStreamAsync(new ChatMessageRequest { Message = "question" });
             if (expect.GetProperty("error").ValueKind == JsonValueKind.Object)

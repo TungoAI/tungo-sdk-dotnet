@@ -192,7 +192,7 @@ internal sealed class TungoTransport : IDisposable
 
     /// <summary>
     /// Turns a replayed ChatTurnResult into the event stream of the turn it stands for: text (the answer), proposal,
-    /// question, citation, error and choice events, then done. The dialog id and the turn number, which a replay
+    /// question, citation, error, choice and next events, then done. The dialog id and the turn number, which a replay
     /// carries only in the body, become the X-Dialog-Id and X-Turn-No headers of <paramref name="message" /> when
     /// they are missing. Returns null when the body is not a chat turn result.
     /// </summary>
@@ -336,6 +336,36 @@ internal sealed class TungoTransport : IDisposable
             if (hasPending)
             {
                 Emit("choice", writer => Copy(writer, pending, null));
+            }
+
+            // A live turn ends its finished answer with next right before done; the stored result keeps it as
+            // followups and next_action.
+            var hasFollowups = result.TryGetProperty("followups", out var followups)
+                && followups.ValueKind == JsonValueKind.Array && followups.GetArrayLength() > 0;
+            var hasAction = result.TryGetProperty("next_action", out var action) && action.ValueKind == JsonValueKind.Object;
+            if (hasFollowups || hasAction)
+            {
+                Emit("next", writer =>
+                {
+                    if (hasFollowups)
+                    {
+                        Write(writer, "followups", followups);
+                    }
+                    else
+                    {
+                        writer.WriteStartArray("followups");
+                        writer.WriteEndArray();
+                    }
+
+                    if (hasAction)
+                    {
+                        Write(writer, "action", action);
+                    }
+                    else
+                    {
+                        writer.WriteNull("action");
+                    }
+                });
             }
 
             Emit("done", writer =>
