@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-13
+
+0.3.0 of this SDK was never published: its release build failed. 0.3.1 has the same content as 0.3.0 plus the build fix below; the changes since 0.2.0 are listed under 0.3.0.
+
+### Changed
+
+- Release build: a conformance test uses `Assert.Single` with a filter, as the xUnit analyzer (xUnit2031) requires.
+- Release build: `AuditEntry.ActionTitle` is no longer marked `[Obsolete]`, which C# does not allow on a `required` property (CS9042); its deprecation is in the XML documentation. It stays required, as the API still sends it.
+- Tests: the model samples carry the properties that 0.3.0 made required (`title_source`, `documents`).
+
 ## [0.3.0] - 2026-11-13
 
 Generated from the platform contract of backend 44066d62. It contains breaking type changes compared with 0.2.0.
@@ -86,7 +96,8 @@ First production-ready release. It contains breaking changes compared with 0.1.0
 
 Initial preview. Not suitable for production use.
 
-[Unreleased]: https://github.com/TungoAI/tungo-sdk-dotnet/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/TungoAI/tungo-sdk-dotnet/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/TungoAI/tungo-sdk-dotnet/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/TungoAI/tungo-sdk-dotnet/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/TungoAI/tungo-sdk-dotnet/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/TungoAI/tungo-sdk-dotnet/releases/tag/v0.1.0

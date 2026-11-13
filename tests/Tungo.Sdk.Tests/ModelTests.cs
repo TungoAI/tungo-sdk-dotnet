@@ -24,7 +24,7 @@ public sealed class ModelTests
     [Fact]
     public void UnknownPropertiesSurviveARoundTrip()
     {
-        const string Json = "{\"id\":\"d1\",\"title\":\"Report\",\"future\":{\"a\":[1,2]}}";
+        const string Json = "{\"id\":\"d1\",\"title\":\"Report\",\"title_source\":\"user\",\"future\":{\"a\":[1,2]}}";
         var renamed = JsonSerializer.Deserialize(Json, TungoJsonContext.Shared.ChatDialogRenamed)!;
         Assert.Equal("d1", renamed.Id);
         Assert.Equal("Report", renamed.Title);
@@ -85,7 +85,7 @@ public sealed class ModelTests
     [Fact]
     public void Int64IsExact()
     {
-        const string Json = "{\"amount_tiyn\":9007199254740993,\"api_key_id\":null,\"at\":\"2026-01-01T00:00:00+05:00\",\"balance_after_tiyn\":-9223372036854775808,"
+        const string Json = "{\"amount_tiyn\":9007199254740993,\"api_key_id\":null,\"at\":\"2026-01-01T00:00:00+05:00\",\"balance_after_tiyn\":-9223372036854775808,\"documents\":null,"
             + "\"id\":\"l1\",\"kind\":\"usage\",\"model\":null,\"note\":null,\"payment_id\":null,\"request_id\":null}";
         var entry = JsonSerializer.Deserialize(Json, TungoJsonContext.Shared.PlatformLedgerEntry)!;
         Assert.Equal(9007199254740993L, entry.AmountTiyn);

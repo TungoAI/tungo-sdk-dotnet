@@ -5,7 +5,7 @@
     <AssemblyName>Tungo.Sdk</AssemblyName>
     <RootNamespace>Tungo.Sdk</RootNamespace>
     <PackageId>Tungo.Sdk</PackageId>
-    <Version>0.3.0</Version> <!-- x-release-version -->
+    <Version>0.3.1</Version> <!-- x-release-version -->
     <Authors>Tungo</Authors>
     <Company>Tungo</Company>
     <Product>Tungo SDK for .NET</Product>

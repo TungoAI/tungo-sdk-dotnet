@@ -564,7 +564,7 @@ public sealed class ConformanceTests
 
             if (expect.TryGetProperty("next", out var next))
             {
-                var nextEvent = Assert.Single(turn.Events.Where(chatEvent => chatEvent.Type == "next"));
+                var nextEvent = Assert.Single(turn.Events, chatEvent => chatEvent.Type == "next");
                 var written = JsonNode.Parse(JsonSerializer.Serialize(nextEvent, TungoJsonContext.Shared.ChatEvent))!.AsObject();
                 var got = new System.Text.Json.Nodes.JsonObject
                 {

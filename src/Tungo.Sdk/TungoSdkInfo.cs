@@ -5,7 +5,7 @@ namespace Tungo.Sdk;
 public static class TungoSdkInfo
 {
     /// <summary>The version of the SDK.</summary>
-    public const string Version = "0.3.0"; // x-release-version
+    public const string Version = "0.3.1"; // x-release-version
 
     /// <summary>The version of the API contract the SDK was generated from.</summary>
     public const string ContractVersion = "0.1.0";

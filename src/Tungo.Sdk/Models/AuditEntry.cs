@@ -12,7 +12,7 @@ public sealed record AuditEntry
     public required AuditEntryAction Action { get; init; }
 
     /// <summary>Что сделано, готовой фразой по-русски. Оставлено для совместимости: фраза всегда русская, поэтому для показа берите код action и параметры data и подставляйте текст на языке человека</summary>
-    [Obsolete("Deprecated by the API contract.")]
+    /// <remarks>Deprecated by the API contract.</remarks>
     [JsonPropertyName("action_title")]
     public required string ActionTitle { get; init; }
 

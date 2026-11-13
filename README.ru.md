@@ -348,7 +348,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 
 ## Версии и поддержка
 
-Библиотека следует [семантическому версионированию](https://semver.org/lang/ru/). Пока старшая версия равна 0, промежуточный выпуск может содержать несовместимые изменения; они всегда перечислены в [истории изменений](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). Этот README описывает версию 0.3.0.
+Библиотека следует [семантическому версионированию](https://semver.org/lang/ru/). Пока старшая версия равна 0, промежуточный выпуск может содержать несовместимые изменения; они всегда перечислены в [истории изменений](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). Этот README описывает версию 0.3.1.
 
 Код создаётся генератором: пишите о проблемах и идеях в [обращения](https://github.com/TungoAI/tungo-sdk-dotnet/issues), а не присылайте правки к созданным файлам. Об уязвимости сообщайте по [политике безопасности](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/SECURITY.md).
 
