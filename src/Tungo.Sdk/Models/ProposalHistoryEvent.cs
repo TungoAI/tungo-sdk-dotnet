@@ -15,6 +15,10 @@ public sealed record ProposalHistoryEvent
     [JsonPropertyName("at")]
     public required string At { get; init; }
 
+    /// <summary>Машинная пометка шага, если есть: `approval_requested` — просили одобрить (статус при этом не менялся); `write_unknown`, `rejected_write_unknown`, `revert_unknown` — исход записи в 1С неизвестен</summary>
+    [JsonPropertyName("code")]
+    public string? Code { get; init; }
+
     /// <summary>Пояснение: причина отклонения, комментарий к одобрению, текст ошибки записи</summary>
     [JsonPropertyName("note")]
     public string? Note { get; init; }

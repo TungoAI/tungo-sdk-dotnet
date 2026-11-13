@@ -25,6 +25,11 @@ public sealed record PlatformRequest
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? CompanyId { get; init; }
 
+    /// <summary>Цена запроса в тиынах — сколько списано с баланса платформы за вызовы модели этого запроса (ход ИИ; у хода потоком — когда он закончится). null — запрос модель не вызывал; у запросов до появления этого поля тоже null</summary>
+    [JsonPropertyName("cost_tiyn")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required long? CostTiyn { get; init; }
+
     /// <summary>Сколько шёл ответ, мс. У хода ИИ — до начала потока событий</summary>
     [JsonPropertyName("duration_ms")]
     public required long DurationMs { get; init; }

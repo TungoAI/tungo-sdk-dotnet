@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Ошибка хода</summary>
 public sealed record ChatHistoryError
 {
-    /// <summary>Причина: - `budget` — кончился лимит (дня или разговора) - `rate_limited` — сервис модели перегружен — повторите - `api` — сбой сервиса модели - `refusal` — модель отказалась отвечать - `context_overflow` — разговор слиш…</summary>
+    /// <summary>Причина: - `budget` — кончился лимит (дня или разговора) - `parallel_turns_limit` — у человека уже идёт предельное число ходов ИИ (тариф без доп. использования) — дождаться ответа на предыдущие вопросы - `rate_limited` —…</summary>
     [JsonPropertyName("code")]
     public ChatHistoryErrorCode? Code { get; init; }
 

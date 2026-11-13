@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Только у code = budget: day — дневной лимит, dialog — лимит разговора A value this SDK does not know yet is preserved as it was sent.</summary>
+/// <summary>Только у code = budget — почему ход остановлен: - `day` — дневной лимит человека исчерпан — продолжить завтра (по Алматы) или поднять лимит - `dialog` — лимит разговора исчерпан — начать новый разговор - `turn` — потолок… A value this SDK does not know yet is preserved as it was sent.</summary>
 [JsonConverter(typeof(ChatTurnErrorLimitKind.Converter))]
 public readonly struct ChatTurnErrorLimitKind : IEquatable<ChatTurnErrorLimitKind>
 {
@@ -22,11 +22,23 @@ public readonly struct ChatTurnErrorLimitKind : IEquatable<ChatTurnErrorLimitKin
     /// <summary><c>dialog</c></summary>
     public static ChatTurnErrorLimitKind Dialog { get; } = new("dialog");
 
+    /// <summary><c>turn</c></summary>
+    public static ChatTurnErrorLimitKind Turn { get; } = new("turn");
+
+    /// <summary><c>plan</c></summary>
+    public static ChatTurnErrorLimitKind Plan { get; } = new("plan");
+
+    /// <summary><c>disabled</c></summary>
+    public static ChatTurnErrorLimitKind Disabled { get; } = new("disabled");
+
+    /// <summary><c>meter</c></summary>
+    public static ChatTurnErrorLimitKind Meter { get; } = new("meter");
+
     /// <summary>The value on the wire.</summary>
     public string Value => _value ?? string.Empty;
 
     /// <summary>Whether the value is one of those listed by the contract this SDK was generated from.</summary>
-    public bool IsKnown => Value is "day" or "dialog";
+    public bool IsKnown => Value is "day" or "dialog" or "turn" or "plan" or "disabled" or "meter";
 
     /// <summary>Wraps a wire value.</summary>
     public static implicit operator ChatTurnErrorLimitKind(string value) => new(value);

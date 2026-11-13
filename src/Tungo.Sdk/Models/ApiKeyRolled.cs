@@ -16,7 +16,7 @@ public sealed record ApiKeyRolled
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required IReadOnlyList<string>? AllowedIps { get; init; }
 
-    /// <summary>Компании, к которым ключ даёт доступ (co_…); пусто у ключа на все компании (all_companies)</summary>
+    /// <summary>Компании, к которым ключ даёт доступ (co_…); пусто у ключа на все компании (all_companies) и у ключа без компаний (no_companies)</summary>
     [JsonPropertyName("company_ids")]
     public required IReadOnlyList<string> CompanyIds { get; init; }
 
@@ -41,9 +41,14 @@ public sealed record ApiKeyRolled
     [JsonPropertyName("id")]
     public required string Id { get; init; }
 
-    /// <summary>Новый ключ целиком (tg_…) — один раз: показать с кнопкой «Скопировать»</summary>
+    /// <summary>Новый ключ целиком (tg_…) — один раз: показать с кнопкой «Скопировать». В повторе по Idempotency-Key — null</summary>
     [JsonPropertyName("key")]
-    public required string Key { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required string? Key { get; init; }
+
+    /// <summary>Только в повторе по Idempotency-Key: почему key = null и что делать, если новый секрет потерян (сменить ещё раз)</summary>
+    [JsonPropertyName("key_note")]
+    public string? KeyNote { get; init; }
 
     /// <summary>Когда ключом пользовались последний раз, ISO 8601 UTC (точность — около минуты); null — ещё ни разу</summary>
     [JsonPropertyName("last_used_at")]
@@ -63,6 +68,10 @@ public sealed record ApiKeyRolled
     /// <summary>Название ключа для людей</summary>
     [JsonPropertyName("name")]
     public required string Name { get; init; }
+
+    /// <summary>Ключ без доступа к компаниям и их 1С: company_ids пуст, all_companies = false; компаний не видит никогда. Пустой company_ids сам по себе вида не называет — смотреть на all_companies и no_companies</summary>
+    [JsonPropertyName("no_companies")]
+    public required bool NoCompanies { get; init; }
 
     /// <summary>Права ключа: `company.read` — читать данные компаний (есть всегда); `chat.use` — работать с ИИ-бухгалтером; `proposals.create` — готовить документы для 1С; `proposals.approve` — одобрять запись в 1С; `automations.read` —…</summary>
     [JsonPropertyName("permissions")]
@@ -126,10 +135,12 @@ public sealed record ApiKeyRolled
         builder.Append(", ExpiresAt = ").Append((object?)ExpiresAt);
         builder.Append(", Id = ").Append((object?)Id);
         builder.Append(", Key = [REDACTED]");
+        builder.Append(", KeyNote = ").Append((object?)KeyNote);
         builder.Append(", LastUsedAt = ").Append((object?)LastUsedAt);
         builder.Append(", LastUsedIp = ").Append((object?)LastUsedIp);
         builder.Append(", MonthlyCapTiyn = ").Append((object?)MonthlyCapTiyn);
         builder.Append(", Name = ").Append((object?)Name);
+        builder.Append(", NoCompanies = ").Append((object?)NoCompanies);
         builder.Append(", Permissions = ").Append((object?)Permissions);
         builder.Append(", Prefix = ").Append((object?)Prefix);
         builder.Append(", PreviousSecretValidUntil = ").Append((object?)PreviousSecretValidUntil);

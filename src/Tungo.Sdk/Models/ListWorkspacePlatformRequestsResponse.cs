@@ -16,6 +16,14 @@ public sealed record ListWorkspacePlatformRequestsResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? NextCursor { get; init; }
 
+    /// <summary>Сколько всего записей под этими фильтрами (курсор не учитывается). Считается не дальше 10 000: если записей больше — здесь 10 000 и total_more = true</summary>
+    [JsonPropertyName("total")]
+    public required long Total { get; init; }
+
+    /// <summary>true — записей больше, чем total: писать «больше 10 000», а не точное число</summary>
+    [JsonPropertyName("total_more")]
+    public required bool TotalMore { get; init; }
+
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }

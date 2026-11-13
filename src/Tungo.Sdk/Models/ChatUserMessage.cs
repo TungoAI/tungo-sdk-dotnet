@@ -19,6 +19,10 @@ public sealed record ChatUserMessage
     [JsonPropertyName("id")]
     public required string Id { get; init; }
 
+    /// <summary>Упоминания через «@» в этом вопросе, если были: вид, id и название на момент отправки</summary>
+    [JsonPropertyName("mentions")]
+    public IReadOnlyList<ChatHistoryMention>? Mentions { get; init; }
+
     /// <summary>Вопрос идущего хода: ответа ещё нет, его дочитывают потоком (GET …/chat/{id}/events?turn=). Только у последнего сообщения</summary>
     [JsonPropertyName("pending")]
     public bool? Pending { get; init; }

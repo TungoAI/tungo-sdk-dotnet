@@ -7,11 +7,12 @@ namespace Tungo.Sdk;
 /// <summary>Запись журнала организации: кто, когда и что сделал.</summary>
 public sealed record AuditEntry
 {
-    /// <summary>Что сделано — машинное имя вида «объект.действие»; подпись по-русски — в action_title. Значения: - `company.created` — Компания заведена - `company.updated` — Карточка компании изменена - `company.archived` — Компания уб…</summary>
+    /// <summary>Код действия вида «объект.действие». Текст для человека собирайте сами на его языке: по этому коду и параметрам из data (ниже — что значит каждый код). Значения: - `company.created` — Компания заведена - `company.updated…</summary>
     [JsonPropertyName("action")]
     public required AuditEntryAction Action { get; init; }
 
-    /// <summary>Что сделано, по-русски — для показа</summary>
+    /// <summary>Что сделано, готовой фразой по-русски. Оставлено для совместимости: фраза всегда русская, поэтому для показа берите код action и параметры data и подставляйте текст на языке человека</summary>
+    [Obsolete("Deprecated by the API contract.")]
     [JsonPropertyName("action_title")]
     public required string ActionTitle { get; init; }
 
@@ -29,7 +30,7 @@ public sealed record AuditEntry
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? CompanyId { get; init; }
 
-    /// <summary>Подробности действия (JSON, ключи snake_case): например { before, after } у изменений. Вид зависит от action — показывать как дополнительные сведения</summary>
+    /// <summary>Параметры действия (JSON, ключи snake_case) — для подстановки в текст и для подробностей: например { role } у смены роли, { from, amount_tiyn, kind } у платежа, { before, after } у изменений. Набор зависит от action</summary>
     [JsonPropertyName("data")]
     public JsonElement? Data { get; init; }
 
@@ -41,6 +42,11 @@ public sealed record AuditEntry
     [JsonPropertyName("ip")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? Ip { get; init; }
+
+    /// <summary>Над чем сделано — с названием, чтобы не показывать безликое «Организация»: в отличие от target, у действий с вебхуком это сам адрес вебхука, у платежа есть сумма и назначение. null — без отдельного объекта. По ключу API …</summary>
+    [JsonPropertyName("object")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required AuditEntryObject? Object { get; init; }
 
     /// <summary>Номер запроса (req_…) — по нему поддержка найдёт запрос; null — фоновое действие</summary>
     [JsonPropertyName("request_id")]

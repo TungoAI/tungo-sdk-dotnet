@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Конец хода — приходит после записи хода в историю. Дальше событий не будет</summary>
+/// <summary>Конец хода — приходит после записи хода в историю. Дальше событий хода не будет; в первом ходе разговора за ним может прийти одно title</summary>
 public sealed record ChatEventDone
 {
     /// <summary>Итоговый ответ хода целиком (Markdown): заменить им собранный из text</summary>

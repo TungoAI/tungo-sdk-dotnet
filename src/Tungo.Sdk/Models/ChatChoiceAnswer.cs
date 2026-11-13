@@ -7,13 +7,17 @@ namespace Tungo.Sdk;
 /// <summary>Ответ на один вопрос из события choice</summary>
 public sealed record ChatChoiceAnswer
 {
-    /// <summary>Свой ответ текстом (вариант «свой ответ»). Нужен selected или other — хотя бы одно</summary>
+    /// <summary>Свой ответ текстом (вариант «свой ответ»). Нужен selected или other — хотя бы одно (или skipped)</summary>
     [JsonPropertyName("other")]
     public string? Other { get; init; }
 
     /// <summary>Выбранные варианты — их label из options, в любом порядке; без повторов. В вопросе без multi_select — не больше одного</summary>
     [JsonPropertyName("selected")]
     public IReadOnlyList<string>? Selected { get; init; }
+
+    /// <summary>true — «Пропустить»: вопрос оставлен без ответа, selected и other не передавать. ИИ узнаёт, что вопрос пропущен, и продолжает без этого ответа. У вопроса-подтверждения действия пропуск равен отказу: действие не выполняет…</summary>
+    [JsonPropertyName("skipped")]
+    public bool? Skipped { get; init; }
 
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]

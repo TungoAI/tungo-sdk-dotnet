@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Блок ответа в истории — те же виды, что клиент собирает из живого потока: text | tool | proposal | question | error</summary>
+/// <summary>Блок ответа в истории — те же виды, что клиент собирает из живого потока: text | tool | proposal | batch | question | error</summary>
 /// <remarks>
-/// One of: <see cref="ChatHistoryText" />, <see cref="ChatHistoryTool" />, <see cref="ChatHistoryProposal" />, <see cref="ChatHistoryQuestion" />, <see cref="ChatHistoryError" />.
+/// One of: <see cref="ChatHistoryText" />, <see cref="ChatHistoryTool" />, <see cref="ChatHistoryProposal" />, <see cref="ChatHistoryBatch" />, <see cref="ChatHistoryQuestion" />, <see cref="ChatHistoryError" />.
 /// A variant this SDK does not know yet is kept as raw JSON: <see cref="IsUnknown" /> is true and <see cref="Json" /> holds it.
 /// </remarks>
 [JsonConverter(typeof(ChatHistoryBlock.Converter))]
@@ -34,6 +34,12 @@ public sealed class ChatHistoryBlock
     /// <summary>Wraps a <see cref="ChatHistoryProposal" />.</summary>
     public ChatHistoryBlock(ChatHistoryProposal value)
         : this(value ?? throw new ArgumentNullException(nameof(value)), "proposal", null)
+    {
+    }
+
+    /// <summary>Wraps a <see cref="ChatHistoryBatch" />.</summary>
+    public ChatHistoryBlock(ChatHistoryBatch value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), "batch", null)
     {
     }
 
@@ -70,6 +76,9 @@ public sealed class ChatHistoryBlock
     /// <summary>The value as <see cref="ChatHistoryProposal" />, or null when it is another variant.</summary>
     public ChatHistoryProposal? AsProposal => Value as ChatHistoryProposal;
 
+    /// <summary>The value as <see cref="ChatHistoryBatch" />, or null when it is another variant.</summary>
+    public ChatHistoryBatch? AsBatch => Value as ChatHistoryBatch;
+
     /// <summary>The value as <see cref="ChatHistoryQuestion" />, or null when it is another variant.</summary>
     public ChatHistoryQuestion? AsQuestion => Value as ChatHistoryQuestion;
 
@@ -84,6 +93,9 @@ public sealed class ChatHistoryBlock
 
     /// <summary>Wraps a <see cref="ChatHistoryProposal" />.</summary>
     public static implicit operator ChatHistoryBlock(ChatHistoryProposal value) => new(value);
+
+    /// <summary>Wraps a <see cref="ChatHistoryBatch" />.</summary>
+    public static implicit operator ChatHistoryBlock(ChatHistoryBatch value) => new(value);
 
     /// <summary>Wraps a <see cref="ChatHistoryQuestion" />.</summary>
     public static implicit operator ChatHistoryBlock(ChatHistoryQuestion value) => new(value);
@@ -114,6 +126,8 @@ public sealed class ChatHistoryBlock
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryTool)!, tag, null);
                 case "proposal":
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryProposal)!, tag, null);
+                case "batch":
+                    return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryBatch)!, tag, null);
                 case "question":
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryQuestion)!, tag, null);
                 case "error":
@@ -135,6 +149,9 @@ public sealed class ChatHistoryBlock
                     break;
                 case ChatHistoryProposal variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryProposal);
+                    break;
+                case ChatHistoryBatch variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryBatch);
                     break;
                 case ChatHistoryQuestion variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryQuestion);

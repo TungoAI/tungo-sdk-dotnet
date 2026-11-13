@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Форма: ip — ИП, too — ТОО, ao — АО, other — другое A value this SDK does not know yet is preserved as it was sent.</summary>
+/// <summary>Форма: ip — ИП, too — ТОО, ao — АО, other — другое; null — ещё не указана (задаётся в карточке компании: PATCH /v1/companies/{co}) A value this SDK does not know yet is preserved as it was sent.</summary>
 [JsonConverter(typeof(CompanyLegalForm.Converter))]
 public readonly struct CompanyLegalForm : IEquatable<CompanyLegalForm>
 {

@@ -23,6 +23,15 @@ public sealed record ChatTurnResult
     [JsonPropertyName("errors")]
     public required IReadOnlyList<ChatTurnError> Errors { get; init; }
 
+    /// <summary>Вопросы-продолжения под ответом, до 3, на языке разговора: нажатие — обычный новый вопрос с этим текстом. Пусто — предложить нечего</summary>
+    [JsonPropertyName("followups")]
+    public required IReadOnlyList<string> Followups { get; init; }
+
+    /// <summary>Предложенное следующее действие; null — нет</summary>
+    [JsonPropertyName("next_action")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required ChatNextAction? NextAction { get; init; }
+
     /// <summary>Открытый уточняющий вопрос: ответ — POST …/chat/{dialog_id}/answer; null — вопроса нет</summary>
     [JsonPropertyName("pending_question")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

@@ -22,7 +22,8 @@ public sealed record Company
 
     /// <summary>The `legal_form` property.</summary>
     [JsonPropertyName("legal_form")]
-    public required CompanyLegalForm LegalForm { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required CompanyLegalForm? LegalForm { get; init; }
 
     /// <summary>Название компании, как его ввели при заведении</summary>
     [JsonPropertyName("name")]

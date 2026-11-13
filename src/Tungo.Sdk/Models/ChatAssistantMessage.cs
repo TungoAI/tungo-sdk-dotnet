@@ -19,9 +19,18 @@ public sealed record ChatAssistantMessage
     [JsonPropertyName("citations")]
     public required IReadOnlyList<ChatCitation> Citations { get; init; }
 
+    /// <summary>Вопросы-продолжения под ответом, до 3, на языке разговора: нажатие — обычный новый вопрос с этим текстом. Пусто — предложить нечего</summary>
+    [JsonPropertyName("followups")]
+    public required IReadOnlyList<string> Followups { get; init; }
+
     /// <summary>Устойчивый id сообщения: &lt;dialog_id&gt;:&lt;номер хода&gt;:a</summary>
     [JsonPropertyName("id")]
     public required string Id { get; init; }
+
+    /// <summary>Предложенное следующее действие; null — нет</summary>
+    [JsonPropertyName("next_action")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required ChatNextAction? NextAction { get; init; }
 
     /// <summary>Номера предложений этого хода — то же, что proposal-блоки, списком</summary>
     [JsonPropertyName("proposal_ids")]

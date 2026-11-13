@@ -11,7 +11,7 @@ public sealed record ApiKeyUsageByModelItem
     [JsonPropertyName("cost_tiyn")]
     public required long CostTiyn { get; init; }
 
-    /// <summary>Модель ИИ (техническое имя)</summary>
+    /// <summary>Модель ИИ: tungo-1-flash, tungo-1, tungo-1-deep (tungo-search, tungo-legacy)</summary>
     [JsonPropertyName("model")]
     public required string Model { get; init; }
 

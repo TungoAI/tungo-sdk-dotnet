@@ -87,7 +87,7 @@ internal static class Sdk
         """;
 
     public const string TurnJson = """
-        {"answer":"hi","citations":[],"dialog_id":"d1","errors":[],"pending_question":null,"proposals":[],"questions":[],"stop_reason":"end_turn","turn_no":1}
+        {"answer":"hi","citations":[],"dialog_id":"d1","errors":[],"followups":[],"next_action":null,"pending_question":null,"proposals":[],"questions":[],"stop_reason":"end_turn","turn_no":1}
         """;
 
     public const string HookAcceptedJson = """
@@ -96,7 +96,7 @@ internal static class Sdk
 
     public static string DialogsJson(string? nextCursor, params string[] ids)
     {
-        var items = ids.Select(id => "{\"id\":\"" + id + "\",\"message_count\":1,\"running\":false,\"title\":\"T\",\"updated_at\":\"2026-01-01T00:00:00Z\"}");
+        var items = ids.Select(id => "{\"id\":\"" + id + "\",\"message_count\":1,\"running\":false,\"title\":\"T\",\"title_source\":\"user\",\"updated_at\":\"2026-01-01T00:00:00Z\"}");
         return "{\"data\":[" + string.Join(",", items) + "],\"next_cursor\":" + (nextCursor is null ? "null" : "\"" + nextCursor + "\"") + "}";
     }
 

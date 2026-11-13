@@ -15,6 +15,10 @@ public sealed record ChatDialogRenamed
     [JsonPropertyName("title")]
     public required string Title { get; init; }
 
+    /// <summary>The `title_source` property.</summary>
+    [JsonPropertyName("title_source")]
+    public required ChatTitleSource TitleSource { get; init; }
+
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }

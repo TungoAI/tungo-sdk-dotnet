@@ -4,9 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Уточняющий вопрос ИИ с вариантами. Вариант «свой ответ» есть всегда и в options не входит</summary>
+/// <summary>Вопрос с вариантами: уточняющий вопрос ИИ или подтверждение действия (confirm). Вариант «свой ответ» есть всегда и в options не входит</summary>
 public sealed record ChatChoiceQuestion
 {
+    /// <summary>true — это не уточнение, а подтверждение действия: вопрос задала программа, действие выполнится только по кнопке согласия (первый вариант). Пропуск, свой текст и закрытие — отказ: кнопку «Пропустить» не показывать. false…</summary>
+    [JsonPropertyName("confirm")]
+    public required bool Confirm { get; init; }
+
     /// <summary>Короткая подпись вопроса, до ~12 символов (для вкладки или чипа)</summary>
     [JsonPropertyName("header")]
     public required string Header { get; init; }

@@ -24,6 +24,11 @@ public sealed record PlatformLedgerEntry
     [JsonPropertyName("balance_after_tiyn")]
     public required long BalanceAfterTiyn { get; init; }
 
+    /// <summary>Документы пополнения (kind = purchase) из его платежа. null — у остальных видов и у ключа не на все компании. Файл PDF ядро не формирует: чек выпускает касса, ссылка появляется в receipt_url</summary>
+    [JsonPropertyName("documents")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required PlatformLedgerEntryDocuments? Documents { get; init; }
+
     /// <summary>id движения (led_…); он же — курсор</summary>
     [JsonPropertyName("id")]
     public required string Id { get; init; }

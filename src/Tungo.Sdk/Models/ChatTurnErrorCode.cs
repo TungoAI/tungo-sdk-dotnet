@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Причина: - `budget` — кончился лимит (дня или разговора) - `rate_limited` — сервис модели перегружен — повторите - `api` — сбой сервиса модели - `refusal` — модель отказалась отвечать - `context_overflow` — разговор слиш… A value this SDK does not know yet is preserved as it was sent.</summary>
+/// <summary>Причина: - `budget` — кончился лимит (дня или разговора) - `parallel_turns_limit` — у человека уже идёт предельное число ходов ИИ (тариф без доп. использования) — дождаться ответа на предыдущие вопросы - `rate_limited` —… A value this SDK does not know yet is preserved as it was sent.</summary>
 [JsonConverter(typeof(ChatTurnErrorCode.Converter))]
 public readonly struct ChatTurnErrorCode : IEquatable<ChatTurnErrorCode>
 {
@@ -18,6 +18,9 @@ public readonly struct ChatTurnErrorCode : IEquatable<ChatTurnErrorCode>
 
     /// <summary><c>budget</c></summary>
     public static ChatTurnErrorCode Budget { get; } = new("budget");
+
+    /// <summary><c>parallel_turns_limit</c></summary>
+    public static ChatTurnErrorCode ParallelTurnsLimit { get; } = new("parallel_turns_limit");
 
     /// <summary><c>rate_limited</c></summary>
     public static ChatTurnErrorCode RateLimited { get; } = new("rate_limited");
@@ -65,7 +68,7 @@ public readonly struct ChatTurnErrorCode : IEquatable<ChatTurnErrorCode>
     public string Value => _value ?? string.Empty;
 
     /// <summary>Whether the value is one of those listed by the contract this SDK was generated from.</summary>
-    public bool IsKnown => Value is "budget" or "rate_limited" or "api" or "refusal" or "context_overflow" or "aborted" or "max_iterations" or "max_tokens" or "empty_answer" or "unexpected" or "history" or "internal" or "stream_failed" or "batch_failed" or "batch_abandoned";
+    public bool IsKnown => Value is "budget" or "parallel_turns_limit" or "rate_limited" or "api" or "refusal" or "context_overflow" or "aborted" or "max_iterations" or "max_tokens" or "empty_answer" or "unexpected" or "history" or "internal" or "stream_failed" or "batch_failed" or "batch_abandoned";
 
     /// <summary>Wraps a wire value.</summary>
     public static implicit operator ChatTurnErrorCode(string value) => new(value);

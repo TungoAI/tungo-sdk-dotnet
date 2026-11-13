@@ -4,6 +4,12 @@ namespace Tungo.Sdk;
 /// <summary>Parameters of <c>client.Proposals.ListAsync</c> (GET /v1/companies/{co}/proposals).</summary>
 public sealed record ProposalsListParams
 {
+    /// <summary>true — только отправленные на одобрение и ещё не решённые; false — только остальные</summary>
+    public ListCompanyProposalsApprovalRequested? ApprovalRequested { get; init; }
+
+    /// <summary>Только документы одного задания пачки (bat_…) — тот же состав, что в сводке задания и у «Одобрить и отправить в 1С». Не id задания — 400; задания нет — пустой список</summary>
+    public string? BatchId { get; init; }
+
     /// <summary>next_cursor из ответа прошлой страницы; без него — первая (самая свежая) страница. Остальные фильтры — те же, что у первой страницы.</summary>
     public string? Cursor { get; init; }
 
@@ -19,8 +25,11 @@ public sealed record ProposalsListParams
     /// <summary>Сколько на странице: 1–100, по умолчанию 20</summary>
     public int? Limit { get; init; }
 
-    /// <summary>Поиск без учёта регистра: номер предложения (P-…), номер документа 1С, контрагент (имя из превью), БИН/ИИН и другие реквизиты документа</summary>
+    /// <summary>Поиск без учёта регистра: номер предложения (P-…), номер документа 1С, контрагент (имя из превью), БИН/ИИН, сумма (как пишут: «150 000,50» или 150000.5) и другие реквизиты документа</summary>
     public string? Q { get; init; }
+
+    /// <summary>Только из этих источников (origin.source): один или несколько через запятую (chat, statement, esf, automation). Неизвестный — 400</summary>
+    public string? Source { get; init; }
 
     /// <summary>Только в этих статусах: один или несколько через запятую (previewed, approved, rejected, committed, posted, verified, mismatch, failed); без него — все. Неизвестный — 400</summary>
     public string? Status { get; init; }

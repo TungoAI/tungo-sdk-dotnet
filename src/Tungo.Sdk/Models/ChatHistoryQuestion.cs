@@ -4,9 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Вопрос ИИ к человеку</summary>
+/// <summary>Вопрос ИИ к человеку. Уточнение, которое ещё ждёт ответа, сюда не попадает — оно приходит только полем awaiting разговора, чтобы экран не показал его дважды</summary>
 public sealed record ChatHistoryQuestion
 {
+    /// <summary>The `answer` property.</summary>
+    [JsonPropertyName("answer")]
+    public ChatHistoryQuestionAnswer? Answer { get; init; }
+
     /// <summary>Вопрос ИИ</summary>
     [JsonPropertyName("kind")]
     public string Kind { get; init; } = "question";

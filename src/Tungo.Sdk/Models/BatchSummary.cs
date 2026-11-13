@@ -43,6 +43,11 @@ public sealed record BatchSummary
     [JsonPropertyName("running")]
     public required bool Running { get; init; }
 
+    /// <summary>Данные файла выписки (счёт, банк, период, остатки); null — задание не по файлу выписки (ЭСФ, DirectBank, одобрение) или заведено до появления поля</summary>
+    [JsonPropertyName("statement")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required BatchStatement? Statement { get; init; }
+
     /// <summary>Название задания</summary>
     [JsonPropertyName("title")]
     public required string Title { get; init; }

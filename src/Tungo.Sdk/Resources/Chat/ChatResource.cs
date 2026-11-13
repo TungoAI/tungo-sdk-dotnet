@@ -91,6 +91,42 @@ public sealed class ChatResource
         return value;
     }
 
+    private TungoRequest ListMentionsRequest(ChatListMentionsParams? parameters, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/mentions", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/mentions", TungoAuth.ApiKey);
+        var query = new QueryBuilder();
+        query.Add("limit", parameters?.Limit);
+        query.Add("q", parameters?.Q);
+        query.Add("types", parameters?.Types);
+        request.Query = query.ToString();
+        return request;
+    }
+
+    /// <summary>Что можно упомянуть через «@» (GET /v1/companies/{co}/chat/mentions).</summary>
+    public async Task<ChatMentionSearch> ListMentionsAsync(ChatListMentionsParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = ListMentionsRequest(parameters, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatMentionSearch, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest ListSuggestionsRequest(ChatListSuggestionsParams? parameters, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/suggestions", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/suggestions", TungoAuth.ApiKey);
+        var query = new QueryBuilder();
+        query.Add("lang", parameters?.Lang?.Value);
+        request.Query = query.ToString();
+        return request;
+    }
+
+    /// <summary>Подсказки пустого чата (GET /v1/companies/{co}/chat/suggestions).</summary>
+    public async Task<ChatSuggestions> ListSuggestionsAsync(ChatListSuggestionsParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = ListSuggestionsRequest(parameters, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatSuggestions, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
     private TungoRequest GetRequest(string id, RequestOptions? options)
     {
         var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/{id}", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)), TungoAuth.ApiKey);

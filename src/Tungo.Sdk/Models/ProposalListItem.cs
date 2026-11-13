@@ -11,6 +11,10 @@ public sealed record ProposalListItem
     [JsonPropertyName("approval")]
     public required ProposalApproval Approval { get; init; }
 
+    /// <summary>The `approval_request` property.</summary>
+    [JsonPropertyName("approval_request")]
+    public required ProposalApprovalRequest ApprovalRequest { get; init; }
+
     /// <summary>Сколько блокеров: больше 0 — одобрить нельзя, нужен ответ человека в чате</summary>
     [JsonPropertyName("blocker_count")]
     public required long BlockerCount { get; init; }
@@ -23,7 +27,7 @@ public sealed record ProposalListItem
     [JsonPropertyName("created_at")]
     public required string CreatedAt { get; init; }
 
-    /// <summary>Разговор чата, в котором ИИ подготовил предложение: «Открыть разговор» — GET …/chat/{dialog_id} (если он ваш). null — не из чата (пачка, автоматизация, MCP)</summary>
+    /// <summary>Разговор чата, в котором ИИ подготовил предложение: «Открыть разговор» — GET …/chat/{dialog_id} (если он ваш). null — не из разговора человека (пачка из ручки, автоматизация, MCP)</summary>
     [JsonPropertyName("dialog_id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? DialogId { get; init; }
@@ -60,9 +64,18 @@ public sealed record ProposalListItem
     [JsonPropertyName("line_count")]
     public required long LineCount { get; init; }
 
+    /// <summary>The `origin` property.</summary>
+    [JsonPropertyName("origin")]
+    public required ProposalOrigin Origin { get; init; }
+
     /// <summary>The `status` property.</summary>
     [JsonPropertyName("status")]
     public required ProposalStatus Status { get; init; }
+
+    /// <summary>Причина отказа — у статусов rejected (отклонено) и failed (записать не удалось): последняя такая запись history. null — статус другой или причину не записали</summary>
+    [JsonPropertyName("status_reason")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required ProposalListItemStatusReason? StatusReason { get; init; }
 
     /// <summary>Статус по-русски для показа (бейдж)</summary>
     [JsonPropertyName("status_title")]

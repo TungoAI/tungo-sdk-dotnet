@@ -19,6 +19,10 @@ public sealed record CardSession
     [JsonPropertyName("script_url")]
     public required string ScriptUrl { get; init; }
 
+    /// <summary>true — тестовый терминал ePay: настоящие деньги не списываются, платят тестовыми картами. Показать на форме пометку «тестовая оплата»</summary>
+    [JsonPropertyName("test_mode")]
+    public required bool TestMode { get; init; }
+
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }

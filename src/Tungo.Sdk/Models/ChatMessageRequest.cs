@@ -21,6 +21,16 @@ public sealed record ChatMessageRequest
     [JsonConverter(typeof(OptionalJsonConverter<string>))]
     public Optional<string?> DialogId { get; init; }
 
+    /// <summary>Усилие ИИ на этот вопрос: low &lt; medium &lt; high &lt; xhigh &lt; max — глубже думает, дольше и дороже (больше расход лимита). Не прислано или null — усилие выбирает Tungo. Только на тарифе с выбором усилия (max_effort тарифа в GE…</summary>
+    [JsonPropertyName("effort")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [JsonConverter(typeof(OptionalJsonConverter<ChatMessageRequestEffort?>))]
+    public Optional<ChatMessageRequestEffort?> Effort { get; init; }
+
+    /// <summary>Упоминания через «@» в этом вопросе, до 10: ИИ получит их вместе с вопросом. Каждое проверяется на доступ: нет объекта в этой компании или нет права его видеть — 404 (error.code = mention_not_found, error.index — номер в…</summary>
+    [JsonPropertyName("mentions")]
+    public IReadOnlyList<ChatMention>? Mentions { get; init; }
+
     /// <summary>Вопрос человека, до 4000 знаков; можно не писать, если приложены файлы</summary>
     [JsonPropertyName("message")]
     public string? Message { get; init; }

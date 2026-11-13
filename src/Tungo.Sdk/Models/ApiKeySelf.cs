@@ -21,7 +21,7 @@ public sealed record ApiKeySelf
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required ApiKeySelfBlockedReason? BlockedReason { get; init; }
 
-    /// <summary>Компании, к которым ключ даёт доступ (co_…); пусто у ключа на все компании (all_companies)</summary>
+    /// <summary>Компании, к которым ключ даёт доступ (co_…); пусто у ключа на все компании (all_companies) и у ключа без компаний (no_companies)</summary>
     [JsonPropertyName("company_ids")]
     public required IReadOnlyList<string> CompanyIds { get; init; }
 
@@ -68,6 +68,10 @@ public sealed record ApiKeySelf
     /// <summary>Название ключа для людей</summary>
     [JsonPropertyName("name")]
     public required string Name { get; init; }
+
+    /// <summary>Ключ без доступа к компаниям и их 1С: company_ids пуст, all_companies = false; компаний не видит никогда. Пустой company_ids сам по себе вида не называет — смотреть на all_companies и no_companies</summary>
+    [JsonPropertyName("no_companies")]
+    public required bool NoCompanies { get; init; }
 
     /// <summary>Права ключа: `company.read` — читать данные компаний (есть всегда); `chat.use` — работать с ИИ-бухгалтером; `proposals.create` — готовить документы для 1С; `proposals.approve` — одобрять запись в 1С; `automations.read` —…</summary>
     [JsonPropertyName("permissions")]

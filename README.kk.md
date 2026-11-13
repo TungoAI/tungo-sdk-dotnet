@@ -311,7 +311,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 
 ## API анықтамалығы
 
-Tungo платформасы API-інің келісімшартынан жасалған: **ресурстар — 13, әдістер — 82, вебхук оқиғаларының түрлері — 22**.
+Tungo платформасы API-інің келісімшартынан жасалған: **ресурстар — 13, әдістер — 85, вебхук оқиғаларының түрлері — 22**.
 
 | Ресурс | Сипаттама | Әдістер |
 | --- | --- | --- |
@@ -320,8 +320,8 @@ Tungo платформасы API-інің келісімшартынан жас�
 | `client.Platform` | Платформа балансы, қозғалыстар кітабы, шығын есептері, лимиттер, аудит және модельдер тарифтері | `ListUsageRatesAsync` · `GetAccountAsync` · `GetAuditAsync / GetAuditAllAsync` · `GetLedgerAsync / GetLedgerAllAsync` · `ListLimitsAsync` · `ListRequestsAsync / ListRequestsAllAsync` · `GetUsageAsync` |
 | `client.ApiKeys` | Ағымдағы API кілті туралы мәлімет және оның шығын статистикасы | `GetCurrentAsync` · `GetCurrentUsageAsync` · `GetUsageAsync` |
 | `client.Webhooks` | Ұйымның шығыс вебхуктары (Svix): мекенжайлар, оқиғалар каталогы, жеткізулер және қолтаңбаны тексеру | `ListEndpointsAsync / ListEndpointsAllAsync` · `CreateEndpointAsync` · `GetEndpointAsync` · `UpdateEndpointAsync` · `DeleteEndpointAsync` · `ListEndpointAttemptsAsync / ListEndpointAttemptsAllAsync` · `RotateEndpointSecretAsync` · `TestEndpointAsync` · `ListEventTypesAsync` · `ListMessagesAsync / ListMessagesAllAsync` · `ListMessageAttemptsAsync / ListMessageAttemptsAllAsync` · `ResendMessageAsync` · `GetUsageAsync` |
-| `client.Chat` | ЖИ-бухгалтермен диалогтар: сұрақтар, ағынды чат (SSE), токендерді санау және тарих | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `StopAsync` |
-| `client.Proposals` | ЖИ-бухгалтер ұсынған құжаттар: қарау, 1С-ке жазуды мақұлдау және қабылдамау | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` |
+| `client.Chat` | ЖИ-бухгалтермен диалогтар: сұрақтар, ағынды чат (SSE), токендерді санау және тарих | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `StopAsync` |
+| `client.Proposals` | ЖИ-бухгалтер ұсынған құжаттар: қарау, 1С-ке жазуды мақұлдау және қабылдамау | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` · `RequestApprovalAsync` |
 | `client.Feed` | Компанияның оқиғалар мен ұсыныстар таспасы (беттер және тікелей SSE ағыны) | `GetAsync / GetAllAsync` · `ListEventsAsync` |
 | `client.Batches` | Банк үзінді көшірмелерін, кіріс ЭШФ-ларды және DirectBank-ті өңдеу бумалары | `ListAsync / ListAllAsync` · `CreateBankStatementAsync` · `CreateEsfPurchasesAsync` · `GetAsync` · `ListEventsAsync` · `StopAsync` · `GetSummaryAsync` · `ListStatementsAsync / ListStatementsAllAsync` · `PollDirectbankAsync` |
 | `client.Esf` | Кіріс және шығыс электрондық шот-фактуралар (ЭШФ АЖ) | `GetIncomingAsync / GetIncomingAllAsync` · `GetOutgoingAsync / GetOutgoingAllAsync` |
@@ -348,7 +348,7 @@ Tungo платформасы API-інің келісімшартынан жас�
 
 ## Нұсқалар және қолдау
 
-Кітапхана [семантикалық нұсқалауды](https://semver.org/) ұстанады. Жоғарғы нұсқа 0 болып тұрғанда аралық шығарылымда үйлесімсіз өзгерістер болуы мүмкін; олар әрдайым [өзгерістер тарихында](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md) келтіріледі. Бұл README 0.2.0 нұсқасын сипаттайды.
+Кітапхана [семантикалық нұсқалауды](https://semver.org/) ұстанады. Жоғарғы нұсқа 0 болып тұрғанда аралық шығарылымда үйлесімсіз өзгерістер болуы мүмкін; олар әрдайым [өзгерістер тарихында](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md) келтіріледі. Бұл README 0.3.0 нұсқасын сипаттайды.
 
 Код генератормен жасалады: мәселелер мен ұсыныстар туралы жасалған файлдарға түзету жібермей, [өтініштерге](https://github.com/TungoAI/tungo-sdk-dotnet/issues) жазыңыз. Осалдық туралы [қауіпсіздік саясаты](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/SECURITY.md) бойынша хабарлаңыз.
 

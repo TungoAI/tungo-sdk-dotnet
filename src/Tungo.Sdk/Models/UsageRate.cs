@@ -11,7 +11,11 @@ public sealed record UsageRate
     [JsonPropertyName("cache_read_per_mtok_tiyn")]
     public required long CacheReadPerMtokTiyn { get; init; }
 
-    /// <summary>Цена 1 млн токенов записи в кэш модели в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
+    /// <summary>Цена 1 млн токенов записи в кэш модели на 1 час (дороже: так кэшируются правила и инструменты) в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
+    [JsonPropertyName("cache_write_1h_per_mtok_tiyn")]
+    public required long CacheWrite1hPerMtokTiyn { get; init; }
+
+    /// <summary>Цена 1 млн токенов записи в кэш модели на 5 минут в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
     [JsonPropertyName("cache_write_per_mtok_tiyn")]
     public required long CacheWritePerMtokTiyn { get; init; }
 
@@ -23,13 +27,17 @@ public sealed record UsageRate
     [JsonPropertyName("input_per_mtok_tiyn")]
     public required long InputPerMtokTiyn { get; init; }
 
-    /// <summary>Модель ИИ (техническое имя)</summary>
+    /// <summary>Модель ИИ: tungo-1-flash, tungo-1, tungo-1-deep (tungo-search — поиск по нормам, tungo-legacy — прежняя)</summary>
     [JsonPropertyName("model")]
     public required string Model { get; init; }
 
     /// <summary>Цена 1 млн токенов ответа в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
     [JsonPropertyName("output_per_mtok_tiyn")]
     public required long OutputPerMtokTiyn { get; init; }
+
+    /// <summary>Название модели для людей</summary>
+    [JsonPropertyName("title")]
+    public required string Title { get; init; }
 
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]

@@ -11,7 +11,11 @@ public sealed record ErrorDetail
     [JsonPropertyName("allowed_methods")]
     public IReadOnlyList<ErrorDetailAllowedMethodItem>? AllowedMethods { get; init; }
 
-    /// <summary>Уточнение вида: по нему выбирается действие интерфейса (кнопка «Пополнить», «Войти иначе»…). Нет поля — хватает type и message. Известные коды: - `sso_domain_taken` (409) — домен SSO уже подтверждён другой организацией -…</summary>
+    /// <summary>При code = subscription_unpaid_debt — сколько оплатить, в тиынах: сумма всех неоплаченных счетов подписки.</summary>
+    [JsonPropertyName("amount_tiyn")]
+    public long? AmountTiyn { get; init; }
+
+    /// <summary>Уточнение вида: по нему выбирается действие интерфейса (кнопка «Пополнить», «Войти иначе»…). Нет поля — хватает type и message. Известные коды: - `cannot_ban_self` (409) — админка: закрыть вход самому себе нельзя - `user…</summary>
     [JsonPropertyName("code")]
     public string? Code { get; init; }
 
@@ -19,9 +23,21 @@ public sealed record ErrorDetail
     [JsonPropertyName("fields")]
     public IReadOnlyList<FieldError>? Fields { get; init; }
 
+    /// <summary>При code = free_limit_unavailable. Главная причина отказа в бесплатном лимите: `admin_decision` — решение администратора; `temporary_email` — учётная запись на временной почте; `hidden_email` — скрытая почта Apple; `emai…</summary>
+    [JsonPropertyName("free_blocked_reason")]
+    public ErrorDetailFreeBlockedReason? FreeBlockedReason { get; init; }
+
     /// <summary>Готовый текст для человека по-русски: что случилось, что делать и к кому обратиться. Показывать как есть; не разбирать — формулировки меняются.</summary>
     [JsonPropertyName("message")]
     public required string Message { get; init; }
+
+    /// <summary>Тот же срок моментом времени — ISO 8601, UTC: когда запрос можно повторить.</summary>
+    [JsonPropertyName("next_request_at")]
+    public string? NextRequestAt { get; init; }
+
+    /// <summary>При code = subscription_unpaid_debt — платёж для кнопки «Оплатить» (…/billing/payments/{payment_id}/pay-form); null — вести к списку счетов.</summary>
+    [JsonPropertyName("payment_id")]
+    public string? PaymentId { get; init; }
 
     /// <summary>При code = missing_permission — какого права не хватает: права в компании (company.read, company.manage, company.members.manage, onec.connect, proposals.create, proposals.approve, chat.use, audit.read, automations.manage…</summary>
     [JsonPropertyName("permission")]
@@ -34,6 +50,10 @@ public sealed record ErrorDetail
     /// <summary>Когда ограничение снимется само — ISO 8601, UTC. Есть у plan_limit_reached (конец окна тарифа) и у месячных потолков (workspace_cap_reached, company_cap_reached, member_cap_reached, key_cap_reached, platform_cap_reached …</summary>
     [JsonPropertyName("resets_at")]
     public string? ResetsAt { get; init; }
+
+    /// <summary>При отказе по частоте (429) на адресах экрана входа — через сколько секунд можно повторить (то же число, что в заголовке Retry-After). Показать таймер.</summary>
+    [JsonPropertyName("retry_after_seconds")]
+    public long? RetryAfterSeconds { get; init; }
 
     /// <summary>При code = role_above_yours — ключ роли в компании, которую нельзя выдать или снять (например chief_accountant).</summary>
     [JsonPropertyName("role")]

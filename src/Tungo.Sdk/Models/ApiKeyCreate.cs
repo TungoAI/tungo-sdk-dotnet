@@ -37,9 +37,13 @@ public sealed record ApiKeyCreate
     [JsonPropertyName("name")]
     public required string Name { get; init; }
 
+    /// <summary>Ключ без доступа к компаниям и их 1С: ни одной компании он не видит — ни сейчас, ни будущих; company_ids и all_companies не передаются, права — только company.read (он ничего не открывает). По умолчанию false</summary>
+    [JsonPropertyName("no_companies")]
+    public bool? NoCompanies { get; init; }
+
     /// <summary>Права ключа (1–20): `company.read` — читать данные компаний (добавляется всегда, даже если не передано); `chat.use` — работать с ИИ-бухгалтером; `proposals.create` — готовить документы для 1С; `proposals.approve` — одобр…</summary>
     [JsonPropertyName("permissions")]
-    public required IReadOnlyList<string> Permissions { get; init; }
+    public IReadOnlyList<string>? Permissions { get; init; }
 
     /// <summary>Предел записи в 1С по ключу: какие виды документов ключ может одобрять (как kinds правила автоодобрения: sale, purchase, bank_receipt, bank_payment, counterparty, contract, inventory_writeoff, cash_order_in, cash_order_o…</summary>
     [JsonPropertyName("write_kinds")]

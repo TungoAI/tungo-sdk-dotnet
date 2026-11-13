@@ -19,9 +19,13 @@ public sealed record ChatDialogSummary
     [JsonPropertyName("running")]
     public required bool Running { get; init; }
 
-    /// <summary>Заголовок — первый вопрос одной строкой (до 64 знаков, длиннее — с «…»); вопрос из одних файлов — их имена</summary>
+    /// <summary>Название одной строкой (до 64 знаков, длиннее — с «…»): человека, иначе от ИИ, иначе первый вопрос (вопрос из одних файлов — их имена). Откуда оно — title_source</summary>
     [JsonPropertyName("title")]
     public required string Title { get; init; }
+
+    /// <summary>The `title_source` property.</summary>
+    [JsonPropertyName("title_source")]
+    public required ChatTitleSource TitleSource { get; init; }
 
     /// <summary>Последнее изменение (у идущего хода — его начало), ISO 8601 UTC</summary>
     [JsonPropertyName("updated_at")]

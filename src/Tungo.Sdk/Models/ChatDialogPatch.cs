@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Новое название разговора</summary>
 public sealed record ChatDialogPatch
 {
-    /// <summary>Новое название, до 64 символов; пустая строка — вернуть заголовок по первому вопросу</summary>
+    /// <summary>Новое название, до 64 символов; пустая строка — вернуть автоматическое название (от ИИ, а пока его нет — первый вопрос)</summary>
     [JsonPropertyName("title")]
     public required string Title { get; init; }
 

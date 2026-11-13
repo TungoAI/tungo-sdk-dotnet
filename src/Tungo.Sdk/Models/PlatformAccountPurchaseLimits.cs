@@ -19,6 +19,10 @@ public sealed record PlatformAccountPurchaseLimits
     [JsonPropertyName("min_tiyn")]
     public required long MinTiyn { get; init; }
 
+    /// <summary>Сколько уже пополнено сегодня (сутки по Алматы; платежи без итога тоже в счёте) — тот же счёт, что у предела daily_max_tiyn в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
+    [JsonPropertyName("today_tiyn")]
+    public required long TodayTiyn { get; init; }
+
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }

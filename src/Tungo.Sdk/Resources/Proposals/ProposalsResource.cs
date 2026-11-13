@@ -17,12 +17,15 @@ public sealed class ProposalsResource
     {
         var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/proposals", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/proposals", TungoAuth.ApiKey);
         var query = new QueryBuilder();
+        query.Add("approval_requested", parameters?.ApprovalRequested?.Value);
+        query.Add("batch_id", parameters?.BatchId);
         query.Add("cursor", parameters?.Cursor);
         query.Add("date_from", parameters?.DateFrom);
         query.Add("date_to", parameters?.DateTo);
         query.Add("kind", parameters?.Kind);
         query.Add("limit", parameters?.Limit);
         query.Add("q", parameters?.Q);
+        query.Add("source", parameters?.Source);
         query.Add("status", parameters?.Status);
         request.Query = query.ToString();
         return request;
@@ -114,6 +117,25 @@ public sealed class ProposalsResource
 
         var request = RejectRequest(id, body, options);
         var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ProposalDecision, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest RequestApprovalRequest(string id, ProposalApprovalRequestBody? body, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Post, "/v1/companies/{co}/proposals/{id}/request-approval", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/proposals/" + TungoPath.Segment(id, nameof(id)) + "/request-approval", TungoAuth.ApiKey);
+        if (body is not null)
+        {
+            request.SetJsonBody(body, TungoJsonContext.Shared.ProposalApprovalRequestBody);
+        }
+
+        return request;
+    }
+
+    /// <summary>Отправить на одобрение (POST /v1/companies/{co}/proposals/{id}/request-approval).</summary>
+    public async Task<ProposalApprovalRequestResult> RequestApprovalAsync(string id, ProposalApprovalRequestBody? body = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = RequestApprovalRequest(id, body, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ProposalApprovalRequestResult, options, cancellationToken).ConfigureAwait(false);
         return value;
     }
 }
