@@ -53,6 +53,10 @@ public sealed class TungoClientOptions
     /// <summary>
     /// The handler to build the SDK's own <see cref="System.Net.Http.HttpClient" /> on (ignored when <see cref="HttpClient" /> is set). The SDK does not dispose it.
     /// A handler that follows redirects is refused with a <see cref="TungoConfigurationException" />: set <c>AllowAutoRedirect = false</c> on it.
+    /// The SDK recognises <c>HttpClientHandler</c>, <c>SocketsHttpHandler</c> and any handler with a public boolean <c>AllowAutoRedirect</c>
+    /// or <c>AutomaticRedirection</c> property (<c>AndroidMessageHandler</c>, <c>NSUrlSessionHandler</c>, <c>WinHttpHandler</c>), also
+    /// at the end of a chain of <c>DelegatingHandler</c>s. A handler of another kind is accepted as it is and must not follow redirects:
+    /// a followed redirect is detected only after the request, with the API key, has reached the other host.
     /// </summary>
     public HttpMessageHandler? HttpMessageHandler { get; set; }
 

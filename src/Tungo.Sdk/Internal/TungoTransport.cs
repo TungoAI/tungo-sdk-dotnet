@@ -806,7 +806,13 @@ internal sealed class TungoTransport : IDisposable
         return value.TotalSeconds.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
     }
 
-    /// <summary>Whether a caller's handler (or the innermost one of a chain of delegating handlers) is known to follow redirects.</summary>
+    /// <summary>
+    /// Whether a caller's handler (or the innermost one of a chain of delegating handlers) is known to follow redirects:
+    /// an <c>HttpClientHandler</c> or <c>SocketsHttpHandler</c> with <c>AllowAutoRedirect</c>, or any other handler whose
+    /// public boolean <c>AllowAutoRedirect</c> or <c>AutomaticRedirection</c> property is true. That covers the platform
+    /// handlers that follow redirects by default (<c>AndroidMessageHandler</c>, <c>NSUrlSessionHandler</c>, <c>WinHttpHandler</c>)
+    /// without a reference to their assemblies.
+    /// </summary>
     private static bool FollowsRedirects(HttpMessageHandler handler)
     {
         var current = handler;
@@ -821,7 +827,23 @@ internal sealed class TungoTransport : IDisposable
             return sockets.AllowAutoRedirect;
         }
 #endif
-        return current is HttpClientHandler { AllowAutoRedirect: true };
+        if (current is HttpClientHandler clientHandler)
+        {
+            return clientHandler.AllowAutoRedirect;
+        }
+
+        return RedirectSwitchIsOn(current, "AllowAutoRedirect") || RedirectSwitchIsOn(current, "AutomaticRedirection");
+    }
+
+    /// <summary>Whether the handler has a public, readable boolean property of that name that is true.</summary>
+#if NET
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2075", Justification = "A handler whose redirect property was trimmed away never sets it, so the check reads what the handler itself uses.")]
+#endif
+    private static bool RedirectSwitchIsOn(HttpMessageHandler handler, string name)
+    {
+        var property = handler.GetType().GetProperty(name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+        return property is { CanRead: true } && property.PropertyType == typeof(bool) && property.GetIndexParameters().Length == 0
+            && property.GetValue(handler) is true;
     }
 
 #if NET

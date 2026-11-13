@@ -463,6 +463,41 @@ public sealed class StreamingTests
     }
 
     [Fact]
+    public void APlatformHandlerThatFollowsRedirectsIsRecognisedByItsRedirectProperty()
+    {
+        // AndroidMessageHandler and NSUrlSessionHandler have AllowAutoRedirect, WinHttpHandler AutomaticRedirection; all default to true.
+        using var android = new AllowAutoRedirectHandler { AllowAutoRedirect = true };
+        Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = android }));
+        using var winHttp = new AutomaticRedirectionHandler { AutomaticRedirection = true };
+        Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = winHttp }));
+        using var wrapped = new PassThroughHandler { InnerHandler = new AutomaticRedirectionHandler { AutomaticRedirection = true } };
+        Assert.Throws<TungoConfigurationException>(() => new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = wrapped }));
+
+        using var androidOff = new AllowAutoRedirectHandler { AllowAutoRedirect = false };
+        using var accepted = new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = androidOff });
+        using var winHttpOff = new AutomaticRedirectionHandler { AutomaticRedirection = false };
+        using var acceptedToo = new TungoClient(new TungoClientOptions { ApiKey = Sdk.ApiKey, HttpMessageHandler = winHttpOff });
+    }
+
+    private sealed class AllowAutoRedirectHandler : HttpMessageHandler
+    {
+        public bool AllowAutoRedirect { get; set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) => throw new NotSupportedException();
+    }
+
+    private sealed class AutomaticRedirectionHandler : HttpMessageHandler
+    {
+        public bool AutomaticRedirection { get; set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) => throw new NotSupportedException();
+    }
+
+    private sealed class PassThroughHandler : DelegatingHandler
+    {
+    }
+
+    [Fact]
     public async Task ACallersHttpClientThatFollowsARedirectDoesNotDeliverTheForeignResponse()
     {
         await using var other = new LoopbackServer(connection => connection.WriteAsync("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: " + Encoding.UTF8.GetByteCount(Sdk.CompanyJson).ToString(System.Globalization.CultureInfo.InvariantCulture) + "\r\nConnection: close\r\n\r\n" + Sdk.CompanyJson));

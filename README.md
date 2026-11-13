@@ -261,7 +261,7 @@ var turn = await client.Chat.CreateStreamAsync(new ChatMessageRequest { Message 
 Console.WriteLine($"{turn.DialogId}: {turn.Text}");
 ```
 
-`Chat.ListEventsAsync`, `Feed.ListEventsAsync` and `Batches.ListEventsAsync` return the same `TungoStream<T>`. `TungoStream<T>.GetResponseAsync()` gives the response headers (for example `X-Dialog-Id`) before the first event, and `TungoStream<T>.LastEventId` the `id` of the last server-sent event read so far. `ToChatTurnAsync()` raises `TungoDecodeException` when the stream ends without its final `done` event, so a cut connection never looks like a finished answer; the plain `await foreach` simply ends.
+`Chat.ListEventsAsync`, `Feed.ListEventsAsync` and `Batches.ListEventsAsync` return the same `TungoStream<T>`. `TungoStream<T>.GetResponseAsync()` gives the response headers (for example `X-Dialog-Id`) before the first event, and `TungoStream<T>.LastEventId` the `id` of the last server-sent event read so far. `ToChatTurnAsync()` raises `TungoDecodeException` when the stream ends without its final `done` event, so a cut connection never looks like a finished answer; the plain `await foreach` simply ends. A successful response that is not `text/event-stream` is a `TungoDecodeException`. The exception is a finished chat turn that the API replays for a repeated `Idempotency-Key` (`application/json` with `Idempotent-Replayed: true`): its stored result arrives as the events of that turn, ending with `done`.
 
 ## Webhooks
 
