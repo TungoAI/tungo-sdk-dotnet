@@ -4,18 +4,54 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Источник ответа: норма закона, статья базы знаний</summary>
+/// <summary>Источник ответа: норма закона, статья базы знаний. Приходят по порядку первой ссылки в тексте, каждый источник один раз за ход. Вопросы-продолжения — отдельное событие next</summary>
 public sealed record ChatEventCitation
 {
-    /// <summary>Редакция нормы</summary>
+    /// <summary>Номер статьи</summary>
+    [JsonPropertyName("article")]
+    public string? Article { get; init; }
+
+    /// <summary>Номер главы — у источников без статей</summary>
+    [JsonPropertyName("chapter")]
+    public string? Chapter { get; init; }
+
+    /// <summary>Документ коротко: принятое сокращение, если оно есть в базе («НК РК»), иначе название обычным регистром («Социальный кодекс Республики Казахстан»)</summary>
+    [JsonPropertyName("document")]
+    public required string Document { get; init; }
+
+    /// <summary>Редакция нормы словами</summary>
     [JsonPropertyName("edition")]
     public string? Edition { get; init; }
 
-    /// <summary>Откуда: код нормы или статьи базы знаний</summary>
+    /// <summary>Дата начала редакции, ГГГГ-ММ-ДД</summary>
+    [JsonPropertyName("edition_date")]
+    public string? EditionDate { get; init; }
+
+    /// <summary>Заголовок статьи без «Статья N.» — вторая строка чипа или подсказка</summary>
+    [JsonPropertyName("heading")]
+    public string? Heading { get; init; }
+
+    /// <summary>Короткая подпись для чипа: документ и место в нём, без редакции и пометок</summary>
+    [JsonPropertyName("label")]
+    public required string Label { get; init; }
+
+    /// <summary>Пометка о статусе или природе источника — показывать обязательно: «УТРАТИЛА СИЛУ с 01.01.2026», «по разъяснению КГД», «позиция органа (не норма права)»</summary>
+    [JsonPropertyName("note")]
+    public string? Note { get; init; }
+
+    /// <summary>Номер пункта</summary>
+    [JsonPropertyName("point")]
+    public string? Point { get; init; }
+
+    /// <summary>Подпись целиком, как раньше: документ, место, редакция и пометки одной строкой. Для показа удобнее label, edition и note по отдельности</summary>
     [JsonPropertyName("source")]
     public required string Source { get; init; }
 
-    /// <summary>Название источника</summary>
+    /// <summary>Номер подпункта</summary>
+    [JsonPropertyName("subpoint")]
+    public string? Subpoint { get; init; }
+
+    /// <summary>Заголовок статьи целиком, с «Статья N.» (как раньше). Без номера — heading</summary>
     [JsonPropertyName("title")]
     public required string Title { get; init; }
 
@@ -23,7 +59,7 @@ public sealed record ChatEventCitation
     [JsonPropertyName("type")]
     public string Type { get; init; } = "citation";
 
-    /// <summary>Ссылка на текст источника</summary>
+    /// <summary>Ссылка на текст источника: по ней источник открывают. Она же — ключ источника внутри ответа</summary>
     [JsonPropertyName("url")]
     public string? Url { get; init; }
 

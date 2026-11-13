@@ -19,6 +19,10 @@ public sealed record ChatEventDone
     [JsonPropertyName("cost_tiyn")]
     public long? CostTiyn { get; init; }
 
+    /// <summary>Пора предложить человеку оценить разговор — те же правила, что у rating_prompt в GET …/chat/{id}. Поля нет — не предлагать. Ключу API не приходит</summary>
+    [JsonPropertyName("rating_prompt")]
+    public bool? RatingPrompt { get; init; }
+
     /// <summary>Чем кончился ход: end_turn — ответ готов; awaiting_user — ждёт ответа на вопрос choice; budget — кончился лимит; aborted — остановили; refusal — модель отказалась; context_overflow — разговор слишком длинный; max_iterati…</summary>
     [JsonPropertyName("stop_reason")]
     public string? StopReason { get; init; }

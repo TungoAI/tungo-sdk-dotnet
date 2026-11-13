@@ -311,7 +311,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 
 ## API анықтамалығы
 
-Tungo платформасы API-інің келісімшартынан жасалған: **ресурстар — 13, әдістер — 85, вебхук оқиғаларының түрлері — 22**.
+Tungo платформасы API-інің келісімшартынан жасалған: **ресурстар — 13, әдістер — 90, вебхук оқиғаларының түрлері — 22**.
 
 | Ресурс | Сипаттама | Әдістер |
 | --- | --- | --- |
@@ -320,7 +320,7 @@ Tungo платформасы API-інің келісімшартынан жас�
 | `client.Platform` | Платформа балансы, қозғалыстар кітабы, шығын есептері, лимиттер, аудит және модельдер тарифтері | `ListUsageRatesAsync` · `GetAccountAsync` · `GetAuditAsync / GetAuditAllAsync` · `GetLedgerAsync / GetLedgerAllAsync` · `ListLimitsAsync` · `ListRequestsAsync / ListRequestsAllAsync` · `GetUsageAsync` |
 | `client.ApiKeys` | Ағымдағы API кілті туралы мәлімет және оның шығын статистикасы | `GetCurrentAsync` · `GetCurrentUsageAsync` · `GetUsageAsync` |
 | `client.Webhooks` | Ұйымның шығыс вебхуктары (Svix): мекенжайлар, оқиғалар каталогы, жеткізулер және қолтаңбаны тексеру | `ListEndpointsAsync / ListEndpointsAllAsync` · `CreateEndpointAsync` · `GetEndpointAsync` · `UpdateEndpointAsync` · `DeleteEndpointAsync` · `ListEndpointAttemptsAsync / ListEndpointAttemptsAllAsync` · `RotateEndpointSecretAsync` · `TestEndpointAsync` · `ListEventTypesAsync` · `ListMessagesAsync / ListMessagesAllAsync` · `ListMessageAttemptsAsync / ListMessageAttemptsAllAsync` · `ResendMessageAsync` · `GetUsageAsync` |
-| `client.Chat` | ЖИ-бухгалтермен диалогтар: сұрақтар, ағынды чат (SSE), токендерді санау және тарих | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `StopAsync` |
+| `client.Chat` | ЖИ-бухгалтермен диалогтар: сұрақтар, ағынды чат (SSE), токендерді санау және тарих | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` |
 | `client.Proposals` | ЖИ-бухгалтер ұсынған құжаттар: қарау, 1С-ке жазуды мақұлдау және қабылдамау | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` · `RequestApprovalAsync` |
 | `client.Feed` | Компанияның оқиғалар мен ұсыныстар таспасы (беттер және тікелей SSE ағыны) | `GetAsync / GetAllAsync` · `ListEventsAsync` |
 | `client.Batches` | Банк үзінді көшірмелерін, кіріс ЭШФ-ларды және DirectBank-ті өңдеу бумалары | `ListAsync / ListAllAsync` · `CreateBankStatementAsync` · `CreateEsfPurchasesAsync` · `GetAsync` · `ListEventsAsync` · `StopAsync` · `GetSummaryAsync` · `ListStatementsAsync / ListStatementsAllAsync` · `PollDirectbankAsync` |

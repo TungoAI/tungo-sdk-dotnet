@@ -36,6 +36,11 @@ public sealed record ChatAssistantMessage
     [JsonPropertyName("proposal_ids")]
     public required IReadOnlyList<string> ProposalIds { get; init; }
 
+    /// <summary>Оценка этого ответа человеком; null — не оценён</summary>
+    [JsonPropertyName("rating")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required ChatMessageRating? Rating { get; init; }
+
     /// <summary>Ответ ИИ</summary>
     [JsonPropertyName("role")]
     public string Role { get; init; } = "assistant";
@@ -47,6 +52,10 @@ public sealed record ChatAssistantMessage
     /// <summary>Размышления модели за ход одним текстом; пусто — не было</summary>
     [JsonPropertyName("thinking")]
     public required string Thinking { get; init; }
+
+    /// <summary>Номер ответа в разговоре (он же X-Turn-No и средняя часть id): по нему ответ оценивают — PUT …/chat/{id}/messages/{turn}/rating</summary>
+    [JsonPropertyName("turn_no")]
+    public required long TurnNo { get; init; }
 
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]

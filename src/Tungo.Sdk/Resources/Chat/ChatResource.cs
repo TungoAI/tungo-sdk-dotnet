@@ -110,6 +110,23 @@ public sealed class ChatResource
         return value;
     }
 
+    private TungoRequest GetRatingOptionsRequest(ChatGetRatingOptionsParams? parameters, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/rating-options", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/rating-options", TungoAuth.ApiKey);
+        var query = new QueryBuilder();
+        query.Add("lang", parameters?.Lang?.Value);
+        request.Query = query.ToString();
+        return request;
+    }
+
+    /// <summary>Что нужно форме оценки: причины «вниз» и предел комментария (GET /v1/companies/{co}/chat/rating-options).</summary>
+    public async Task<ChatRatingOptions> GetRatingOptionsAsync(ChatGetRatingOptionsParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = GetRatingOptionsRequest(parameters, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatRatingOptions, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
     private TungoRequest ListSuggestionsRequest(ChatListSuggestionsParams? parameters, RequestOptions? options)
     {
         var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/suggestions", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/suggestions", TungoAuth.ApiKey);
@@ -222,6 +239,74 @@ public sealed class ChatResource
     {
         var request = ListEventsRequest(id, parameters, options);
         return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, true, options, cancellationToken);
+    }
+
+    private TungoRequest RateMessageRequest(string id, string turn, ChatMessageRatingBody body, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Put, "/v1/companies/{co}/chat/{id}/messages/{turn}/rating", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)) + "/messages/" + TungoPath.Segment(turn, nameof(turn)) + "/rating", TungoAuth.ApiKey);
+        request.SetJsonBody(body, TungoJsonContext.Shared.ChatMessageRatingBody);
+        return request;
+    }
+
+    /// <summary>Оценить ответ ИИ: палец вверх или вниз (PUT /v1/companies/{co}/chat/{id}/messages/{turn}/rating).</summary>
+    public async Task<ChatMessageRated> RateMessageAsync(string id, string turn, ChatMessageRatingBody body, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        if (body is null)
+        {
+            throw new ArgumentNullException(nameof(body));
+        }
+
+        var request = RateMessageRequest(id, turn, body, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatMessageRated, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest DeleteMessageRatingRequest(string id, string turn, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Delete, "/v1/companies/{co}/chat/{id}/messages/{turn}/rating", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)) + "/messages/" + TungoPath.Segment(turn, nameof(turn)) + "/rating", TungoAuth.ApiKey);
+        return request;
+    }
+
+    /// <summary>Снять свою оценку ответа (DELETE /v1/companies/{co}/chat/{id}/messages/{turn}/rating).</summary>
+    public async Task<ChatMessageRated> DeleteMessageRatingAsync(string id, string turn, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = DeleteMessageRatingRequest(id, turn, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatMessageRated, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest RateRequest(string id, ChatDialogRatingBody body, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Put, "/v1/companies/{co}/chat/{id}/rating", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)) + "/rating", TungoAuth.ApiKey);
+        request.SetJsonBody(body, TungoJsonContext.Shared.ChatDialogRatingBody);
+        return request;
+    }
+
+    /// <summary>Оценить разговор целиком: от 1 до 5 (PUT /v1/companies/{co}/chat/{id}/rating).</summary>
+    public async Task<ChatDialogRated> RateAsync(string id, ChatDialogRatingBody body, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        if (body is null)
+        {
+            throw new ArgumentNullException(nameof(body));
+        }
+
+        var request = RateRequest(id, body, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatDialogRated, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest DismissRatingRequest(string id, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Post, "/v1/companies/{co}/chat/{id}/rating/dismiss", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)) + "/rating/dismiss", TungoAuth.ApiKey);
+        return request;
+    }
+
+    /// <summary>Не сейчас: закрыть предложение оценить разговор (POST /v1/companies/{co}/chat/{id}/rating/dismiss).</summary>
+    public async Task<ChatRatingDismissed> DismissRatingAsync(string id, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = DismissRatingRequest(id, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatRatingDismissed, options, cancellationToken).ConfigureAwait(false);
+        return value;
     }
 
     private TungoRequest StopRequest(string id, RequestOptions? options)

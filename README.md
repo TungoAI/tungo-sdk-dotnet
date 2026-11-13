@@ -362,7 +362,7 @@ The helpers poll with a growing interval and raise `TungoTimeoutException` when 
 
 ## API reference
 
-Generated from the Tungo Platform API contract: **13 resources, 85 methods, 22 webhook event types**.
+Generated from the Tungo Platform API contract: **13 resources, 90 methods, 22 webhook event types**.
 
 | Resource | Description | Methods |
 | --- | --- | --- |
@@ -371,7 +371,7 @@ Generated from the Tungo Platform API contract: **13 resources, 85 methods, 22 w
 | `client.Platform` | Platform balance, ledger, usage reports, limits, audit log and model rates | `ListUsageRatesAsync` · `GetAccountAsync` · `GetAuditAsync / GetAuditAllAsync` · `GetLedgerAsync / GetLedgerAllAsync` · `ListLimitsAsync` · `ListRequestsAsync / ListRequestsAllAsync` · `GetUsageAsync` |
 | `client.ApiKeys` | The current API key and its usage statistics | `GetCurrentAsync` · `GetCurrentUsageAsync` · `GetUsageAsync` |
 | `client.Webhooks` | Outgoing webhooks of an organisation (Svix): endpoints, event catalogue, deliveries and signature check | `ListEndpointsAsync / ListEndpointsAllAsync` · `CreateEndpointAsync` · `GetEndpointAsync` · `UpdateEndpointAsync` · `DeleteEndpointAsync` · `ListEndpointAttemptsAsync / ListEndpointAttemptsAllAsync` · `RotateEndpointSecretAsync` · `TestEndpointAsync` · `ListEventTypesAsync` · `ListMessagesAsync / ListMessagesAllAsync` · `ListMessageAttemptsAsync / ListMessageAttemptsAllAsync` · `ResendMessageAsync` · `GetUsageAsync` |
-| `client.Chat` | Conversations with the AI accountant: questions, streaming chat (SSE), token counting and history | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `StopAsync` |
+| `client.Chat` | Conversations with the AI accountant: questions, streaming chat (SSE), token counting and history | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` |
 | `client.Proposals` | Documents proposed by the AI accountant: review, approval for posting to 1C, and rejection | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` · `RequestApprovalAsync` |
 | `client.Feed` | The company's feed of events and proposals (pages and a live SSE stream) | `GetAsync / GetAllAsync` · `ListEventsAsync` |
 | `client.Batches` | Processing batches for bank statements, incoming e-invoices and DirectBank | `ListAsync / ListAllAsync` · `CreateBankStatementAsync` · `CreateEsfPurchasesAsync` · `GetAsync` · `ListEventsAsync` · `StopAsync` · `GetSummaryAsync` · `ListStatementsAsync / ListStatementsAllAsync` · `PollDirectbankAsync` |

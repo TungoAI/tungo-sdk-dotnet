@@ -181,6 +181,36 @@ public readonly struct AuditEntryAction : IEquatable<AuditEntryAction>
     /// <summary><c>admin.workspace.contract_seats</c></summary>
     public static AuditEntryAction AdminWorkspaceContractSeats { get; } = new("admin.workspace.contract_seats");
 
+    /// <summary><c>admin.plan_grant.created</c></summary>
+    public static AuditEntryAction AdminPlanGrantCreated { get; } = new("admin.plan_grant.created");
+
+    /// <summary><c>admin.plan_grant.extended</c></summary>
+    public static AuditEntryAction AdminPlanGrantExtended { get; } = new("admin.plan_grant.extended");
+
+    /// <summary><c>admin.plan_grant.revoked</c></summary>
+    public static AuditEntryAction AdminPlanGrantRevoked { get; } = new("admin.plan_grant.revoked");
+
+    /// <summary><c>admin.plan_grant.ended</c></summary>
+    public static AuditEntryAction AdminPlanGrantEnded { get; } = new("admin.plan_grant.ended");
+
+    /// <summary><c>admin.platform_discount.created</c></summary>
+    public static AuditEntryAction AdminPlatformDiscountCreated { get; } = new("admin.platform_discount.created");
+
+    /// <summary><c>admin.platform_discount.revoked</c></summary>
+    public static AuditEntryAction AdminPlatformDiscountRevoked { get; } = new("admin.platform_discount.revoked");
+
+    /// <summary><c>admin.subscription.cancelled</c></summary>
+    public static AuditEntryAction AdminSubscriptionCancelled { get; } = new("admin.subscription.cancelled");
+
+    /// <summary><c>admin.subscription.resumed</c></summary>
+    public static AuditEntryAction AdminSubscriptionResumed { get; } = new("admin.subscription.resumed");
+
+    /// <summary><c>admin.money.exported</c></summary>
+    public static AuditEntryAction AdminMoneyExported { get; } = new("admin.money.exported");
+
+    /// <summary><c>admin.payment_search.pd_viewed</c></summary>
+    public static AuditEntryAction AdminPaymentSearchPdViewed { get; } = new("admin.payment_search.pd_viewed");
+
     /// <summary><c>workspace.sso_provider_created</c></summary>
     public static AuditEntryAction WorkspaceSsoProviderCreated { get; } = new("workspace.sso_provider_created");
 
@@ -370,6 +400,15 @@ public readonly struct AuditEntryAction : IEquatable<AuditEntryAction>
     /// <summary><c>account.deleted</c></summary>
     public static AuditEntryAction AccountDeleted { get; } = new("account.deleted");
 
+    /// <summary><c>langfuse.traces_purged</c></summary>
+    public static AuditEntryAction LangfuseTracesPurged { get; } = new("langfuse.traces_purged");
+
+    /// <summary><c>admin.dialog.langfuse_dataset</c></summary>
+    public static AuditEntryAction AdminDialogLangfuseDataset { get; } = new("admin.dialog.langfuse_dataset");
+
+    /// <summary><c>admin.dialog.langfuse_annotation</c></summary>
+    public static AuditEntryAction AdminDialogLangfuseAnnotation { get; } = new("admin.dialog.langfuse_annotation");
+
     /// <summary><c>account.email_code_sent</c></summary>
     public static AuditEntryAction AccountEmailCodeSent { get; } = new("account.email_code_sent");
 
@@ -466,6 +505,9 @@ public readonly struct AuditEntryAction : IEquatable<AuditEntryAction>
     /// <summary><c>admin.dialog.pd_viewed</c></summary>
     public static AuditEntryAction AdminDialogPdViewed { get; } = new("admin.dialog.pd_viewed");
 
+    /// <summary><c>admin.dialog.rating_comments_viewed</c></summary>
+    public static AuditEntryAction AdminDialogRatingCommentsViewed { get; } = new("admin.dialog.rating_comments_viewed");
+
     /// <summary><c>admin.dialog.label_set</c></summary>
     public static AuditEntryAction AdminDialogLabelSet { get; } = new("admin.dialog.label_set");
 
@@ -498,6 +540,42 @@ public readonly struct AuditEntryAction : IEquatable<AuditEntryAction>
 
     /// <summary><c>site.trackers_saved</c></summary>
     public static AuditEntryAction SiteTrackersSaved { get; } = new("site.trackers_saved");
+
+    /// <summary><c>help.section_created</c></summary>
+    public static AuditEntryAction HelpSectionCreated { get; } = new("help.section_created");
+
+    /// <summary><c>help.section_updated</c></summary>
+    public static AuditEntryAction HelpSectionUpdated { get; } = new("help.section_updated");
+
+    /// <summary><c>help.section_deleted</c></summary>
+    public static AuditEntryAction HelpSectionDeleted { get; } = new("help.section_deleted");
+
+    /// <summary><c>help.article_created</c></summary>
+    public static AuditEntryAction HelpArticleCreated { get; } = new("help.article_created");
+
+    /// <summary><c>help.article_updated</c></summary>
+    public static AuditEntryAction HelpArticleUpdated { get; } = new("help.article_updated");
+
+    /// <summary><c>help.article_deleted</c></summary>
+    public static AuditEntryAction HelpArticleDeleted { get; } = new("help.article_deleted");
+
+    /// <summary><c>help.reordered</c></summary>
+    public static AuditEntryAction HelpReordered { get; } = new("help.reordered");
+
+    /// <summary><c>support.ticket_created</c></summary>
+    public static AuditEntryAction SupportTicketCreated { get; } = new("support.ticket_created");
+
+    /// <summary><c>admin.support.replied</c></summary>
+    public static AuditEntryAction AdminSupportReplied { get; } = new("admin.support.replied");
+
+    /// <summary><c>admin.support.note_added</c></summary>
+    public static AuditEntryAction AdminSupportNoteAdded { get; } = new("admin.support.note_added");
+
+    /// <summary><c>admin.support.ticket_updated</c></summary>
+    public static AuditEntryAction AdminSupportTicketUpdated { get; } = new("admin.support.ticket_updated");
+
+    /// <summary><c>admin.support.attachment_viewed</c></summary>
+    public static AuditEntryAction AdminSupportAttachmentViewed { get; } = new("admin.support.attachment_viewed");
 
     /// <summary><c>canary.triggered</c></summary>
     public static AuditEntryAction CanaryTriggered { get; } = new("canary.triggered");
@@ -536,7 +614,7 @@ public readonly struct AuditEntryAction : IEquatable<AuditEntryAction>
     public string Value => _value ?? string.Empty;
 
     /// <summary>Whether the value is one of those listed by the contract this SDK was generated from.</summary>
-    public bool IsKnown => Value is "company.created" or "company.updated" or "company.archived" or "company.unarchived" or "company.member_added" or "company.member_role_changed" or "company.member_removed" or "company.onboarding_waived" or "company.onboarding_unwaived" or "company.onec_connected" or "company.onec_updated" or "company.onec_copy_uploaded" or "company.onec_copy_held" or "company.onec_connector_code_created" or "company.onec_connector_paired" or "company.onec_connector_rotated" or "company.onec_connector_rotate_refused" or "company.onec_connector_revoked" or "company.onec_connector_link_approved" or "connector.link_created" or "connector.link_denied" or "company.onec_link_approved" or "company.onec_link_revoked" or "onec_link.wrong_match" or "company.profile_rebuild" or "workspace.member_joined" or "workspace.member_role_changed" or "workspace.member_removed" or "workspace.member_access_revoked" or "workspace.invitation_created" or "workspace.invitation_cancelled" or "workspace.policies_updated" or "workspace.scim_token_created" or "workspace.scim_token_revoked" or "workspace.scim_user_provisioned" or "workspace.scim_user_deprovisioned" or "workspace.scim_user_deleted" or "workspace.updated" or "workspace.sso_provider_updated" or "workspace.sso_provider_deleted" or "workspace.sso_domain_verification_requested" or "workspace.sso_domain_verified" or "workspace.ownership_transferred" or "workspace.deleted" or "workspace.created" or "team.checkout_abandoned" or "enterprise.request_created" or "workspace.converted_to_team" or "workspace.deletion_scheduled" or "workspace.deletion_cancelled" or "workspace.invitation_resent" or "team.seats_purchased" or "team.seats_reduced" or "admin.workspace.kind_changed" or "admin.workspace.contract_seats" or "workspace.sso_provider_created" or "workspace.group_created" or "workspace.group_updated" or "workspace.group_deleted" or "workspace.group_member_added" or "workspace.group_member_removed" or "workspace.group_roles_changed" or "workspace.custom_role_created" or "workspace.custom_role_updated" or "workspace.custom_role_deleted" or "workspace.role_ceiling_updated" or "workspace.model_policy_updated" or "workspace.retention_updated" or "workspace.training_consent" or "workspace.audit_exported" or "workspace.compliance_updated" or "workspace.compliance_read" or "api_key.created" or "api_key.updated" or "api_key.rolled" or "api_key.revoked" or "api_key.transferred" or "api_key.disabled" or "api_key.enabled" or "webhook.endpoint_created" or "webhook.endpoint_updated" or "webhook.endpoint_deleted" or "webhook.secret_rotated" or "webhook.secret_read" or "webhook.message_resent" or "company.autonomy.changed" or "automation.paused" or "automation.resumed" or "automation.run.cancel" or "billing.profile.updated" or "billing.payment_method.disabled" or "billing.refund.succeeded" or "billing.manual_charge" or "subscription.created" or "subscription.changed" or "subscription.cancel_scheduled" or "subscription.resumed" or "extra_usage.configured" or "extra_usage.adjusted" or "platform.configured" or "platform.adjusted" or "extra_usage.member_cap_set" or "extra_usage.alert_thresholds_set" or "company.spend_cap_set" or "team.analytics_exported" or "team.spend_exported" or "ai_budget.member_set" or "ai_budget.member_reset" or "spend.cap_threshold_reached" or "spend.company_cap_reached" or "plan.created" or "plan.updated" or "usage_rate.added" or "user.terms.accepted" or "account.deletion_code_sent" or "account.deletion_scheduled" or "account.deletion_cancelled" or "account.deleted" or "account.email_code_sent" or "account.email_bound" or "account.telegram_merged" or "account.google_linked" or "account.telegram_merge_refused" or "admin.ads.conversions_released" or "admin.ads.conversions_rejected" or "admin.ads.signups_exported" or "admin.access.signed_in" or "admin.access.refused" or "admin.two_factor.verified" or "admin.two_factor.enable_requested" or "admin.two_factor.enabled" or "admin.two_factor.disabled" or "admin.session.signed_in" or "admin.user.banned" or "admin.user.unbanned" or "admin.workspace.blocked" or "admin.workspace.unblocked" or "admin.workspace.training_consent" or "admin.user.platform_roles_changed" or "admin.user.free_eligibility_changed" or "admin.user.limit_resets_granted" or "admin.user.limit_resets_revoked" or "usage.limit_reset_applied" or "referral.claimed" or "referral.rewarded" or "admin.enterprise_request.status_changed" or "admin.training.exported" or "admin.setting.changed" or "admin.logs.purged" or "admin.dialog.pd_viewed" or "admin.dialog.label_set" or "admin.dialog.label_removed" or "admin.journal.pd_viewed" or "admin.company.pd_viewed" or "admin.company.pd_searched" or "admin.payment.pd_viewed" or "site.post_published" or "site.post_unpublished" or "site.post_deleted" or "site.legal_published" or "site.trackers_saved" or "canary.triggered" or "billing.payment.new" or "billing.payment.pending" or "billing.payment.requires_action" or "billing.payment.authorized" or "billing.payment.succeeded" or "billing.payment.verified" or "billing.payment.failed" or "billing.payment.cancelled" or "billing.payment.partially_refunded" or "billing.payment.refunded";
+    public bool IsKnown => Value is "company.created" or "company.updated" or "company.archived" or "company.unarchived" or "company.member_added" or "company.member_role_changed" or "company.member_removed" or "company.onboarding_waived" or "company.onboarding_unwaived" or "company.onec_connected" or "company.onec_updated" or "company.onec_copy_uploaded" or "company.onec_copy_held" or "company.onec_connector_code_created" or "company.onec_connector_paired" or "company.onec_connector_rotated" or "company.onec_connector_rotate_refused" or "company.onec_connector_revoked" or "company.onec_connector_link_approved" or "connector.link_created" or "connector.link_denied" or "company.onec_link_approved" or "company.onec_link_revoked" or "onec_link.wrong_match" or "company.profile_rebuild" or "workspace.member_joined" or "workspace.member_role_changed" or "workspace.member_removed" or "workspace.member_access_revoked" or "workspace.invitation_created" or "workspace.invitation_cancelled" or "workspace.policies_updated" or "workspace.scim_token_created" or "workspace.scim_token_revoked" or "workspace.scim_user_provisioned" or "workspace.scim_user_deprovisioned" or "workspace.scim_user_deleted" or "workspace.updated" or "workspace.sso_provider_updated" or "workspace.sso_provider_deleted" or "workspace.sso_domain_verification_requested" or "workspace.sso_domain_verified" or "workspace.ownership_transferred" or "workspace.deleted" or "workspace.created" or "team.checkout_abandoned" or "enterprise.request_created" or "workspace.converted_to_team" or "workspace.deletion_scheduled" or "workspace.deletion_cancelled" or "workspace.invitation_resent" or "team.seats_purchased" or "team.seats_reduced" or "admin.workspace.kind_changed" or "admin.workspace.contract_seats" or "admin.plan_grant.created" or "admin.plan_grant.extended" or "admin.plan_grant.revoked" or "admin.plan_grant.ended" or "admin.platform_discount.created" or "admin.platform_discount.revoked" or "admin.subscription.cancelled" or "admin.subscription.resumed" or "admin.money.exported" or "admin.payment_search.pd_viewed" or "workspace.sso_provider_created" or "workspace.group_created" or "workspace.group_updated" or "workspace.group_deleted" or "workspace.group_member_added" or "workspace.group_member_removed" or "workspace.group_roles_changed" or "workspace.custom_role_created" or "workspace.custom_role_updated" or "workspace.custom_role_deleted" or "workspace.role_ceiling_updated" or "workspace.model_policy_updated" or "workspace.retention_updated" or "workspace.training_consent" or "workspace.audit_exported" or "workspace.compliance_updated" or "workspace.compliance_read" or "api_key.created" or "api_key.updated" or "api_key.rolled" or "api_key.revoked" or "api_key.transferred" or "api_key.disabled" or "api_key.enabled" or "webhook.endpoint_created" or "webhook.endpoint_updated" or "webhook.endpoint_deleted" or "webhook.secret_rotated" or "webhook.secret_read" or "webhook.message_resent" or "company.autonomy.changed" or "automation.paused" or "automation.resumed" or "automation.run.cancel" or "billing.profile.updated" or "billing.payment_method.disabled" or "billing.refund.succeeded" or "billing.manual_charge" or "subscription.created" or "subscription.changed" or "subscription.cancel_scheduled" or "subscription.resumed" or "extra_usage.configured" or "extra_usage.adjusted" or "platform.configured" or "platform.adjusted" or "extra_usage.member_cap_set" or "extra_usage.alert_thresholds_set" or "company.spend_cap_set" or "team.analytics_exported" or "team.spend_exported" or "ai_budget.member_set" or "ai_budget.member_reset" or "spend.cap_threshold_reached" or "spend.company_cap_reached" or "plan.created" or "plan.updated" or "usage_rate.added" or "user.terms.accepted" or "account.deletion_code_sent" or "account.deletion_scheduled" or "account.deletion_cancelled" or "account.deleted" or "langfuse.traces_purged" or "admin.dialog.langfuse_dataset" or "admin.dialog.langfuse_annotation" or "account.email_code_sent" or "account.email_bound" or "account.telegram_merged" or "account.google_linked" or "account.telegram_merge_refused" or "admin.ads.conversions_released" or "admin.ads.conversions_rejected" or "admin.ads.signups_exported" or "admin.access.signed_in" or "admin.access.refused" or "admin.two_factor.verified" or "admin.two_factor.enable_requested" or "admin.two_factor.enabled" or "admin.two_factor.disabled" or "admin.session.signed_in" or "admin.user.banned" or "admin.user.unbanned" or "admin.workspace.blocked" or "admin.workspace.unblocked" or "admin.workspace.training_consent" or "admin.user.platform_roles_changed" or "admin.user.free_eligibility_changed" or "admin.user.limit_resets_granted" or "admin.user.limit_resets_revoked" or "usage.limit_reset_applied" or "referral.claimed" or "referral.rewarded" or "admin.enterprise_request.status_changed" or "admin.training.exported" or "admin.setting.changed" or "admin.logs.purged" or "admin.dialog.pd_viewed" or "admin.dialog.rating_comments_viewed" or "admin.dialog.label_set" or "admin.dialog.label_removed" or "admin.journal.pd_viewed" or "admin.company.pd_viewed" or "admin.company.pd_searched" or "admin.payment.pd_viewed" or "site.post_published" or "site.post_unpublished" or "site.post_deleted" or "site.legal_published" or "site.trackers_saved" or "help.section_created" or "help.section_updated" or "help.section_deleted" or "help.article_created" or "help.article_updated" or "help.article_deleted" or "help.reordered" or "support.ticket_created" or "admin.support.replied" or "admin.support.note_added" or "admin.support.ticket_updated" or "admin.support.attachment_viewed" or "canary.triggered" or "billing.payment.new" or "billing.payment.pending" or "billing.payment.requires_action" or "billing.payment.authorized" or "billing.payment.succeeded" or "billing.payment.verified" or "billing.payment.failed" or "billing.payment.cancelled" or "billing.payment.partially_refunded" or "billing.payment.refunded";
 
     /// <summary>Wraps a wire value.</summary>
     public static implicit operator AuditEntryAction(string value) => new(value);

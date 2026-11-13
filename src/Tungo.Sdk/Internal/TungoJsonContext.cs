@@ -143,6 +143,9 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatDialogDeleted))]
 [JsonSerializable(typeof(ChatDialogList))]
 [JsonSerializable(typeof(ChatDialogPatch))]
+[JsonSerializable(typeof(ChatDialogRated))]
+[JsonSerializable(typeof(ChatDialogRating))]
+[JsonSerializable(typeof(ChatDialogRatingBody))]
 [JsonSerializable(typeof(ChatDialogRenamed))]
 [JsonSerializable(typeof(ChatDialogSummary))]
 [JsonSerializable(typeof(ChatEvent))]
@@ -175,11 +178,18 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatMentionSearch))]
 [JsonSerializable(typeof(ChatMentionUnavailable))]
 [JsonSerializable(typeof(ChatMessage))]
+[JsonSerializable(typeof(ChatMessageRated))]
+[JsonSerializable(typeof(ChatMessageRating))]
+[JsonSerializable(typeof(ChatMessageRatingBody))]
 [JsonSerializable(typeof(ChatMessageRequest))]
 [JsonSerializable(typeof(ChatNextAction))]
 [JsonSerializable(typeof(ChatNextActionParamsValue))]
 [JsonSerializable(typeof(ChatPendingQuestion))]
 [JsonSerializable(typeof(ChatQuestion))]
+[JsonSerializable(typeof(ChatRatingDismissed))]
+[JsonSerializable(typeof(ChatRatingOptions))]
+[JsonSerializable(typeof(ChatRatingOptionsDialogScores))]
+[JsonSerializable(typeof(ChatRatingOptionsReasonItem))]
 [JsonSerializable(typeof(ChatStopResult))]
 [JsonSerializable(typeof(ChatSuggestion))]
 [JsonSerializable(typeof(ChatSuggestionGroup))]
@@ -690,6 +700,12 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatDialogPatch> ChatDialogPatch => Get<ChatDialogPatch>();
 
+    internal JsonTypeInfo<ChatDialogRated> ChatDialogRated => Get<ChatDialogRated>();
+
+    internal JsonTypeInfo<ChatDialogRating> ChatDialogRating => Get<ChatDialogRating>();
+
+    internal JsonTypeInfo<ChatDialogRatingBody> ChatDialogRatingBody => Get<ChatDialogRatingBody>();
+
     internal JsonTypeInfo<ChatDialogRenamed> ChatDialogRenamed => Get<ChatDialogRenamed>();
 
     internal JsonTypeInfo<ChatDialogSummary> ChatDialogSummary => Get<ChatDialogSummary>();
@@ -754,6 +770,12 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatMessage> ChatMessage => Get<ChatMessage>();
 
+    internal JsonTypeInfo<ChatMessageRated> ChatMessageRated => Get<ChatMessageRated>();
+
+    internal JsonTypeInfo<ChatMessageRating> ChatMessageRating => Get<ChatMessageRating>();
+
+    internal JsonTypeInfo<ChatMessageRatingBody> ChatMessageRatingBody => Get<ChatMessageRatingBody>();
+
     internal JsonTypeInfo<ChatMessageRequest> ChatMessageRequest => Get<ChatMessageRequest>();
 
     internal JsonTypeInfo<ChatNextAction> ChatNextAction => Get<ChatNextAction>();
@@ -763,6 +785,14 @@ internal sealed class TungoJsonContext
     internal JsonTypeInfo<ChatPendingQuestion> ChatPendingQuestion => Get<ChatPendingQuestion>();
 
     internal JsonTypeInfo<ChatQuestion> ChatQuestion => Get<ChatQuestion>();
+
+    internal JsonTypeInfo<ChatRatingDismissed> ChatRatingDismissed => Get<ChatRatingDismissed>();
+
+    internal JsonTypeInfo<ChatRatingOptions> ChatRatingOptions => Get<ChatRatingOptions>();
+
+    internal JsonTypeInfo<ChatRatingOptionsDialogScores> ChatRatingOptionsDialogScores => Get<ChatRatingOptionsDialogScores>();
+
+    internal JsonTypeInfo<ChatRatingOptionsReasonItem> ChatRatingOptionsReasonItem => Get<ChatRatingOptionsReasonItem>();
 
     internal JsonTypeInfo<ChatStopResult> ChatStopResult => Get<ChatStopResult>();
 

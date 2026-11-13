@@ -39,6 +39,15 @@ public sealed record ChatDialog
     [JsonPropertyName("pd_restored")]
     public required bool PdRestored { get; init; }
 
+    /// <summary>Оценка разговора человеком; null — не оценён</summary>
+    [JsonPropertyName("rating")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required ChatDialogRating? Rating { get; init; }
+
+    /// <summary>true — пора предложить человеку оценить разговор (форма 1–5 с комментарием). Решает ядро по настройке: достаточно ответов ИИ в разговоре, разговор не оценён, человек не нажимал «не сейчас», и ему не предлагали в последни…</summary>
+    [JsonPropertyName("rating_prompt")]
+    public required bool RatingPrompt { get; init; }
+
     /// <summary>true — идёт ход: дочитать его потоком GET …/chat/{id}/events?turn=&lt;turn&gt;</summary>
     [JsonPropertyName("running")]
     public required bool Running { get; init; }
