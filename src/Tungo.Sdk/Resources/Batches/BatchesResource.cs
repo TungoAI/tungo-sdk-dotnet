@@ -102,7 +102,7 @@ public sealed class BatchesResource
     public TungoStream<ChatEvent> ListEventsAsync(string id, RequestOptions? options = null, CancellationToken cancellationToken = default)
     {
         var request = ListEventsRequest(id, options);
-        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, options, cancellationToken);
+        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, true, options, cancellationToken);
     }
 
     private TungoRequest StopRequest(string id, RequestOptions? options)

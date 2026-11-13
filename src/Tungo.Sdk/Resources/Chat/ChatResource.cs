@@ -68,7 +68,7 @@ public sealed class ChatResource
         }
 
         var request = CreateRequest(body with { Stream = true }, options);
-        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, options, cancellationToken);
+        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, true, options, cancellationToken);
     }
 
     private TungoRequest CountTokensRequest(ChatTokenCountRequest body, RequestOptions? options)
@@ -169,7 +169,7 @@ public sealed class ChatResource
         }
 
         var request = AnswerRequest(id, body with { Stream = true }, options);
-        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, options, cancellationToken);
+        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, true, options, cancellationToken);
     }
 
     private TungoRequest ListEventsRequest(string id, ChatListEventsParams? parameters, RequestOptions? options)
@@ -185,7 +185,7 @@ public sealed class ChatResource
     public TungoStream<ChatEvent> ListEventsAsync(string id, ChatListEventsParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
     {
         var request = ListEventsRequest(id, parameters, options);
-        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, options, cancellationToken);
+        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.ChatEvent, true, options, cancellationToken);
     }
 
     private TungoRequest StopRequest(string id, RequestOptions? options)

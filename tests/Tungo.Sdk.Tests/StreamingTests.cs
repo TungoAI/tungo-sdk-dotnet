@@ -137,6 +137,28 @@ public sealed class StreamingTests
     }
 
     [Fact]
+    public async Task FeedErrorEventEndsTheStreamWithTheTypedException()
+    {
+        // The contract: a feed failure is "event: error" with {error: "feed_failed", message}, then the end of the
+        // stream; the client reconnects. It must not arrive as an item, nor look like a normal end.
+        var failure = "event: error\ndata: {\"error\":\"feed_failed\",\"message\":\"Лента недоступна\"}\n\n";
+        var handler = new StubHandler().Sse("event: feed\n" + FeedEvent + failure + "event: feed\n" + FeedEvent);
+        using var client = Sdk.Client(handler);
+        var ids = new List<string>();
+        var error = await Assert.ThrowsAnyAsync<TungoApiException>(async () =>
+        {
+            await foreach (var item in client.Feed.ListEventsAsync())
+            {
+                ids.Add(item.Id);
+            }
+        });
+        Assert.Equal(new[] { "f1" }, ids);
+        Assert.Equal("feed_failed", error.Code);
+        Assert.Equal("Лента недоступна", error.ApiMessage);
+        Assert.Equal("api_error", error.Type);
+    }
+
+    [Fact]
     public async Task EventStreamOperationsAreStreams()
     {
         var handler = new StubHandler().Sse(TextEvent + DoneEvent).Sse(FeedEvent).Sse(TextEvent);

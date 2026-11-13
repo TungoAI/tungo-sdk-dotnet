@@ -53,6 +53,6 @@ public sealed class FeedResource
     public TungoStream<FeedItem> ListEventsAsync(FeedListEventsParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
     {
         var request = ListEventsRequest(parameters, options);
-        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.FeedItem, options, cancellationToken);
+        return _client.Transport.Stream(request, TungoJsonContext.Tolerant.FeedItem, false, options, cancellationToken);
     }
 }

@@ -17,6 +17,7 @@ public sealed class TungoStream<T> : IAsyncEnumerable<T>, IAsyncDisposable
     private readonly TungoTransport _transport;
     private readonly TungoRequest _request;
     private readonly JsonTypeInfo<T> _typeInfo;
+    private readonly bool _errorIsEvent;
     private readonly RequestOptions? _options;
     private readonly CancellationToken _cancellationToken;
     private readonly object _gate = new();
@@ -24,11 +25,12 @@ public sealed class TungoStream<T> : IAsyncEnumerable<T>, IAsyncDisposable
     private int _enumerated;
     private bool _disposed;
 
-    internal TungoStream(TungoTransport transport, TungoRequest request, JsonTypeInfo<T> typeInfo, RequestOptions? options, CancellationToken cancellationToken)
+    internal TungoStream(TungoTransport transport, TungoRequest request, JsonTypeInfo<T> typeInfo, bool errorIsEvent, RequestOptions? options, CancellationToken cancellationToken)
     {
         _transport = transport;
         _request = request;
         _typeInfo = typeInfo;
+        _errorIsEvent = errorIsEvent;
         _options = options;
         _cancellationToken = cancellationToken;
     }
@@ -157,6 +159,13 @@ public sealed class TungoStream<T> : IAsyncEnumerable<T>, IAsyncDisposable
             return false;
         }
 
+        // Unless "error" is a variant of the events (chat), an error event is the server giving up: the stream did
+        // not finish and has to be resumed, so it must not look like an item or like a normal end.
+        if (!_errorIsEvent && sse.Event == "error")
+        {
+            throw StreamFailure(sse.Data, response);
+        }
+
         T? decoded;
         try
         {
@@ -179,6 +188,73 @@ public sealed class TungoStream<T> : IAsyncEnumerable<T>, IAsyncDisposable
 
         item = decoded;
         return true;
+    }
+
+    /// <summary>
+    /// The exception for the data of an error event: <c>{"error": "code", "message": ...}</c> as the contract sends it
+    /// (or the API error envelope) becomes the typed <see cref="TungoApiException" /> with that code and message.
+    /// </summary>
+    private static TungoApiException StreamFailure(string data, TungoResponse response)
+    {
+        var body = data;
+        JsonElement root = default;
+        var parsed = false;
+        try
+        {
+            using var document = JsonDocument.Parse(data);
+            root = document.RootElement.Clone();
+            parsed = true;
+        }
+        catch (JsonException)
+        {
+            // Not JSON: the exception still reports a failure of the stream.
+        }
+
+        var isEnvelope = parsed && root.ValueKind == JsonValueKind.Object
+            && root.TryGetProperty("error", out var inner) && inner.ValueKind == JsonValueKind.Object;
+        if (!isEnvelope)
+        {
+            string? StringProperty(string name) =>
+                parsed && root.ValueKind == JsonValueKind.Object && root.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String ? value.GetString() : null;
+
+            using var output = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(output))
+            {
+                writer.WriteStartObject();
+                writer.WriteString("type", "error");
+                writer.WritePropertyName("error");
+                writer.WriteStartObject();
+                writer.WriteString("type", "api_error");
+                writer.WriteString("message", StringProperty("message") ?? "The stream reported an error.");
+                if ((StringProperty("code") ?? StringProperty("error")) is { } code)
+                {
+                    writer.WriteString("code", code);
+                }
+
+                if (parsed && root.ValueKind == JsonValueKind.Object)
+                {
+                    foreach (var property in root.EnumerateObject())
+                    {
+                        if (property.Name is not ("type" or "message" or "code" or "error" or "request_id" or "fields"))
+                        {
+                            property.WriteTo(writer);
+                        }
+                    }
+                }
+
+                writer.WriteEndObject();
+                if (StringProperty("request_id") is { } requestId)
+                {
+                    writer.WriteString("request_id", requestId);
+                }
+
+                writer.WriteEndObject();
+            }
+
+            body = System.Text.Encoding.UTF8.GetString(output.ToArray());
+        }
+
+        return ApiErrorParser.Parse(response.StatusCode, response.Headers, body, DateTimeOffset.UtcNow, "api_error");
     }
 
     private static async Task<Stream> ReadBodyStreamAsync(StreamExchange exchange, CancellationToken cancellationToken)

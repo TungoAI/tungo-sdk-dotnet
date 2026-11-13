@@ -115,11 +115,11 @@ internal sealed class TungoTransport : IDisposable
         return response;
     }
 
-    public TungoStream<T> Stream<T>(TungoRequest request, JsonTypeInfo<T> typeInfo, RequestOptions? options, CancellationToken cancellationToken)
+    public TungoStream<T> Stream<T>(TungoRequest request, JsonTypeInfo<T> typeInfo, bool errorIsEvent, RequestOptions? options, CancellationToken cancellationToken)
     {
         // Fail before the caller starts iterating when the call cannot be made at all.
         CheckCredentials(request);
-        return new TungoStream<T>(this, request, typeInfo, options, cancellationToken);
+        return new TungoStream<T>(this, request, typeInfo, errorIsEvent, options, cancellationToken);
     }
 
     /// <summary>Sends a streaming request and returns once the response headers arrived. Retries happen only before that point.</summary>
