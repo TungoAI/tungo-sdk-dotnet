@@ -16,6 +16,10 @@ public sealed record PlatformAutoReload
     [JsonPropertyName("enabled")]
     public required bool Enabled { get; init; }
 
+    /// <summary>Автопополнений за календарный месяц по Алматы не больше этого; месячный потолок трат исчерпан — автопополнения нет</summary>
+    [JsonPropertyName("monthly_count_max")]
+    public required long MonthlyCountMax { get; init; }
+
     /// <summary>Сколько автопополнение может списать за месяц, в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸); null — предел платформы</summary>
     [JsonPropertyName("monthly_limit_tiyn")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]

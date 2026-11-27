@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Блок ответа в истории — те же виды, что клиент собирает из живого потока: text | tool | proposal | batch | question | error</summary>
+/// <summary>Блок ответа в истории — те же виды, что клиент собирает из живого потока: text | tool | proposal | file | batch | memory | question | error</summary>
 /// <remarks>
-/// One of: <see cref="ChatHistoryText" />, <see cref="ChatHistoryTool" />, <see cref="ChatHistoryProposal" />, <see cref="ChatHistoryBatch" />, <see cref="ChatHistoryQuestion" />, <see cref="ChatHistoryError" />.
+/// One of: <see cref="ChatHistoryText" />, <see cref="ChatHistoryTool" />, <see cref="ChatHistoryProposal" />, <see cref="ChatHistoryFile" />, <see cref="ChatHistoryBatch" />, <see cref="ChatHistoryMemory" />, <see cref="ChatHistoryQuestion" />, <see cref="ChatHistoryError" />.
 /// A variant this SDK does not know yet is kept as raw JSON: <see cref="IsUnknown" /> is true and <see cref="Json" /> holds it.
 /// </remarks>
 [JsonConverter(typeof(ChatHistoryBlock.Converter))]
@@ -37,9 +37,21 @@ public sealed class ChatHistoryBlock
     {
     }
 
+    /// <summary>Wraps a <see cref="ChatHistoryFile" />.</summary>
+    public ChatHistoryBlock(ChatHistoryFile value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), "file", null)
+    {
+    }
+
     /// <summary>Wraps a <see cref="ChatHistoryBatch" />.</summary>
     public ChatHistoryBlock(ChatHistoryBatch value)
         : this(value ?? throw new ArgumentNullException(nameof(value)), "batch", null)
+    {
+    }
+
+    /// <summary>Wraps a <see cref="ChatHistoryMemory" />.</summary>
+    public ChatHistoryBlock(ChatHistoryMemory value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), "memory", null)
     {
     }
 
@@ -76,8 +88,14 @@ public sealed class ChatHistoryBlock
     /// <summary>The value as <see cref="ChatHistoryProposal" />, or null when it is another variant.</summary>
     public ChatHistoryProposal? AsProposal => Value as ChatHistoryProposal;
 
+    /// <summary>The value as <see cref="ChatHistoryFile" />, or null when it is another variant.</summary>
+    public ChatHistoryFile? AsFile => Value as ChatHistoryFile;
+
     /// <summary>The value as <see cref="ChatHistoryBatch" />, or null when it is another variant.</summary>
     public ChatHistoryBatch? AsBatch => Value as ChatHistoryBatch;
+
+    /// <summary>The value as <see cref="ChatHistoryMemory" />, or null when it is another variant.</summary>
+    public ChatHistoryMemory? AsMemory => Value as ChatHistoryMemory;
 
     /// <summary>The value as <see cref="ChatHistoryQuestion" />, or null when it is another variant.</summary>
     public ChatHistoryQuestion? AsQuestion => Value as ChatHistoryQuestion;
@@ -94,8 +112,14 @@ public sealed class ChatHistoryBlock
     /// <summary>Wraps a <see cref="ChatHistoryProposal" />.</summary>
     public static implicit operator ChatHistoryBlock(ChatHistoryProposal value) => new(value);
 
+    /// <summary>Wraps a <see cref="ChatHistoryFile" />.</summary>
+    public static implicit operator ChatHistoryBlock(ChatHistoryFile value) => new(value);
+
     /// <summary>Wraps a <see cref="ChatHistoryBatch" />.</summary>
     public static implicit operator ChatHistoryBlock(ChatHistoryBatch value) => new(value);
+
+    /// <summary>Wraps a <see cref="ChatHistoryMemory" />.</summary>
+    public static implicit operator ChatHistoryBlock(ChatHistoryMemory value) => new(value);
 
     /// <summary>Wraps a <see cref="ChatHistoryQuestion" />.</summary>
     public static implicit operator ChatHistoryBlock(ChatHistoryQuestion value) => new(value);
@@ -126,8 +150,12 @@ public sealed class ChatHistoryBlock
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryTool)!, tag, null);
                 case "proposal":
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryProposal)!, tag, null);
+                case "file":
+                    return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryFile)!, tag, null);
                 case "batch":
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryBatch)!, tag, null);
+                case "memory":
+                    return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryMemory)!, tag, null);
                 case "question":
                     return new ChatHistoryBlock(root.Deserialize(TungoJsonContext.For(options).ChatHistoryQuestion)!, tag, null);
                 case "error":
@@ -150,8 +178,14 @@ public sealed class ChatHistoryBlock
                 case ChatHistoryProposal variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryProposal);
                     break;
+                case ChatHistoryFile variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryFile);
+                    break;
                 case ChatHistoryBatch variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryBatch);
+                    break;
+                case ChatHistoryMemory variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryMemory);
                     break;
                 case ChatHistoryQuestion variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatHistoryQuestion);

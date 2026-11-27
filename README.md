@@ -362,7 +362,7 @@ The helpers poll with a growing interval and raise `TungoTimeoutException` when 
 
 ## API reference
 
-Generated from the Tungo Platform API contract: **13 resources, 90 methods, 22 webhook event types**.
+Generated from the Tungo Platform API contract: **15 resources, 100 methods, 22 webhook event types**.
 
 | Resource | Description | Methods |
 | --- | --- | --- |
@@ -371,7 +371,7 @@ Generated from the Tungo Platform API contract: **13 resources, 90 methods, 22 w
 | `client.Platform` | Platform balance, ledger, usage reports, limits, audit log and model rates | `ListUsageRatesAsync` · `GetAccountAsync` · `GetAuditAsync / GetAuditAllAsync` · `GetLedgerAsync / GetLedgerAllAsync` · `ListLimitsAsync` · `ListRequestsAsync / ListRequestsAllAsync` · `GetUsageAsync` |
 | `client.ApiKeys` | The current API key and its usage statistics | `GetCurrentAsync` · `GetCurrentUsageAsync` · `GetUsageAsync` |
 | `client.Webhooks` | Outgoing webhooks of an organisation (Svix): endpoints, event catalogue, deliveries and signature check | `ListEndpointsAsync / ListEndpointsAllAsync` · `CreateEndpointAsync` · `GetEndpointAsync` · `UpdateEndpointAsync` · `DeleteEndpointAsync` · `ListEndpointAttemptsAsync / ListEndpointAttemptsAllAsync` · `RotateEndpointSecretAsync` · `TestEndpointAsync` · `ListEventTypesAsync` · `ListMessagesAsync / ListMessagesAllAsync` · `ListMessageAttemptsAsync / ListMessageAttemptsAllAsync` · `ResendMessageAsync` · `GetUsageAsync` |
-| `client.Chat` | Conversations with the AI accountant: questions, streaming chat (SSE), token counting and history | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` |
+| `client.Chat` | Conversations with the AI accountant: questions, streaming chat (SSE), token counting and history | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListFilesAsync / ListFilesAllAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `CreateUploadAsync` · `DeleteUploadAsync` · `PutUploadPartAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` · `TranslateThinkingAsync` |
 | `client.Proposals` | Documents proposed by the AI accountant: review, approval for posting to 1C, and rejection | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` · `RequestApprovalAsync` |
 | `client.Feed` | The company's feed of events and proposals (pages and a live SSE stream) | `GetAsync / GetAllAsync` · `ListEventsAsync` |
 | `client.Batches` | Processing batches for bank statements, incoming e-invoices and DirectBank | `ListAsync / ListAllAsync` · `CreateBankStatementAsync` · `CreateEsfPurchasesAsync` · `GetAsync` · `ListEventsAsync` · `StopAsync` · `GetSummaryAsync` · `ListStatementsAsync / ListStatementsAllAsync` · `PollDirectbankAsync` |
@@ -379,6 +379,8 @@ Generated from the Tungo Platform API contract: **13 resources, 90 methods, 22 w
 | `client.Forms` | Tax forms (FNO 100.00 and others): building, ISNA checks and data gaps | `ListAsync` · `BuildAsync` · `ListDataGapsAsync` · `GetIsnaAsync` · `ListNotesAsync` |
 | `client.Onec` | Status of the company's connection to its 1C database | `GetStatusAsync` |
 | `client.Automations` | Company automations: incoming hooks, scenarios, step chains, runs and the AI autonomy level | `PostHookAsync` · `ListHooksAsync` · `CreateHookAsync` · `GetHookAsync` · `UpdateHookAsync` · `DeleteHookAsync` · `RotateHookAsync` · `TestHookAsync` · `ListRunsAsync / ListRunsAllAsync` · `GetRunAsync` · `CancelRunAsync` · `RetryRunAsync` · `ListScenariosAsync` · `CreateScenarioAsync` · `GetScenarioAsync` · `PutScenarioAsync` · `UpdateScenarioAsync` · `DeleteScenarioAsync` · `RunScenarioAsync` · `GetStateAsync` · `PutStateAsync` · `GetAutonomyAsync` · `PutAutonomyAsync` |
+| `client.Verification` | Public verification of the electronic signature of Tungo documents: by code, by file, by QR block, and the signing keys (no API key needed) | `ListKeysAsync` · `VerifyQrAsync` · `GetAsync` · `CheckAsync` |
+| `client.Releases` | Public list of downloads: the 1C extension and Tungo Connector (no API key needed) | `ListAsync` |
 
 ## Other SDKs
 
@@ -399,7 +401,7 @@ The same API is available in ten languages. All SDKs are generated from one cont
 
 ## Versioning and support
 
-This library follows [Semantic Versioning](https://semver.org/). While the major version is 0, a minor release may contain breaking changes; they are always listed in the [changelog](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). This README describes version 0.3.1.
+This library follows [Semantic Versioning](https://semver.org/). Minor and patch releases are backwards compatible: the API grows by additions, and a field or method that is to go away is first marked deprecated and kept for at least six months. Breaking changes come only in a new major version and are listed, with migration notes, in the [changelog](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). This README describes version 1.0.0.
 
 The code is generated: please report problems and ideas in the [issue tracker](https://github.com/TungoAI/tungo-sdk-dotnet/issues) rather than opening pull requests against generated files. To report a vulnerability, follow the [security policy](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/SECURITY.md).
 

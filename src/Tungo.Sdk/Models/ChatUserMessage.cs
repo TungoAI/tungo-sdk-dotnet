@@ -23,6 +23,10 @@ public sealed record ChatUserMessage
     [JsonPropertyName("mentions")]
     public IReadOnlyList<ChatHistoryMention>? Mentions { get; init; }
 
+    /// <summary>The `onec_object` property.</summary>
+    [JsonPropertyName("onec_object")]
+    public ChatOnecObject? OnecObject { get; init; }
+
     /// <summary>Вопрос идущего хода: ответа ещё нет, его дочитывают потоком (GET …/chat/{id}/events?turn=). Только у последнего сообщения</summary>
     [JsonPropertyName("pending")]
     public bool? Pending { get; init; }

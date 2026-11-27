@@ -23,6 +23,10 @@ public sealed record ChatTurnResult
     [JsonPropertyName("errors")]
     public required IReadOnlyList<ChatTurnError> Errors { get; init; }
 
+    /// <summary>Файлы (Excel, Word, PDF, CSV), которые ИИ собрал в этом ходе</summary>
+    [JsonPropertyName("files")]
+    public required IReadOnlyList<ChatTurnFile> Files { get; init; }
+
     /// <summary>Вопросы-продолжения под ответом, до 3, на языке разговора: нажатие — обычный новый вопрос с этим текстом. Пусто — предложить нечего</summary>
     [JsonPropertyName("followups")]
     public required IReadOnlyList<string> Followups { get; init; }

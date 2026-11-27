@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Как Tungo достаёт данные 1С: odata — живая 1С через интернет; connector — коробочная 1С в офисе через программу Tungo Connector; snapshot — загруженная копия базы, только чтение; fake — только в тестах A value this SDK does not know yet is preserved as it was sent.</summary>
+/// <summary>Как Tungo достаёт данные 1С: odata — живая 1С через интернет; connector — коробочная 1С в офисе через программу Tungo Connector; module — через расширение «Tungo в 1С», пока у человека открыта 1С; snapshot — загруженная … A value this SDK does not know yet is preserved as it was sent.</summary>
 [JsonConverter(typeof(OneCGateway.Converter))]
 public readonly struct OneCGateway : IEquatable<OneCGateway>
 {
@@ -28,11 +28,14 @@ public readonly struct OneCGateway : IEquatable<OneCGateway>
     /// <summary><c>connector</c></summary>
     public static OneCGateway Connector { get; } = new("connector");
 
+    /// <summary><c>module</c></summary>
+    public static OneCGateway Module { get; } = new("module");
+
     /// <summary>The value on the wire.</summary>
     public string Value => _value ?? string.Empty;
 
     /// <summary>Whether the value is one of those listed by the contract this SDK was generated from.</summary>
-    public bool IsKnown => Value is "odata" or "snapshot" or "fake" or "connector";
+    public bool IsKnown => Value is "odata" or "snapshot" or "fake" or "connector" or "module";
 
     /// <summary>Wraps a wire value.</summary>
     public static implicit operator OneCGateway(string value) => new(value);

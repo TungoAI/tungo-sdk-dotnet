@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Поставить автоматизации компании на паузу или снять её.</summary>
 public sealed record AutomationStateInput
 {
-    /// <summary>true — поставить все автоматизации компании на паузу: новые запуски не начинаются (идущий доводит текущий шаг, остановить его — POST …/runs/{id}/cancel), события хуков принимаются и ждут в очереди; false — снять паузу (п…</summary>
+    /// <summary>true — поставить все автоматизации компании на паузу: новые запуски не начинаются (идущий доводит текущий шаг и ждёт снятия паузы в очереди, потом продолжит со следующего шага; остановить его совсем — POST …/runs/{id}/ca…</summary>
     [JsonPropertyName("paused")]
     public required bool Paused { get; init; }
 

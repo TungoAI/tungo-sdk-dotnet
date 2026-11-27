@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Документы пополнения (kind = purchase) из его платежа. null — у остальных видов и у ключа не на все компании. Файл PDF ядро не формирует: чек выпускает касса, ссылка появляется в receipt_url</summary>
 public sealed record PlatformLedgerEntryDocuments
 {
-    /// <summary>Номер акта выполненных работ (ACT-…), когда платёж прошёл; null — нет</summary>
+    /// <summary>Устарело: номер акта (ACT-…) только у старых платежей; у новых — null, акт ежемесячный (GET /v1/workspaces/{ws}/documents)</summary>
     [JsonPropertyName("act_number")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public required string? ActNumber { get; init; }

@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Вопрос, размер которого нужно посчитать</summary>
 public sealed record ChatTokenCountRequest
 {
-    /// <summary>Файлы, как в POST …/chat. До 5 файлов, каждый до 10 МБ, все вместе до 14 МБ (до кодирования в base64). Картинка — до 5 МБ, PDF — до 100 страниц. Форматы (по расширению имени): .pdf, .jpg, .jpeg, .png, .webp, .docx, .xlsx…</summary>
+    /// <summary>Файлы, как в POST …/chat. До 5 файлов, каждый до 10 МБ, все вместе до 14 МБ (до кодирования в base64). Картинка — до 5 МБ, PDF — до 100 страниц. Форматы (по расширению имени): .pdf, .jpg, .jpeg, .png, .webp, .svg, .docx,…</summary>
     [JsonPropertyName("attachments")]
     public IReadOnlyList<ChatAttachment>? Attachments { get; init; }
 

@@ -4,22 +4,101 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Файл к вопросу: PDF, скан, Excel, Word, выписка</summary>
-public sealed record ChatAttachment
+/// <summary>Файл к вопросу: PDF, скан, Excel, Word (.docx, .doc), выписка, архив (.zip, .rar, .7z) — base64 в теле или upload_id загрузки по частям</summary>
+/// <remarks>
+/// One of: <see cref="ChatAttachmentData" />, <see cref="ChatAttachmentUpload" />.
+/// A variant this SDK does not know yet is kept as raw JSON: <see cref="IsUnknown" /> is true and <see cref="Json" /> holds it.
+/// </remarks>
+[JsonConverter(typeof(ChatAttachment.Converter))]
+public sealed class ChatAttachment
 {
-    /// <summary>Содержимое файла в base64 (можно с префиксом data:…;base64,)</summary>
-    [JsonPropertyName("data")]
-    public required string Data { get; init; }
+    private ChatAttachment(object? value, JsonElement? json)
+    {
+        Value = value;
+        Json = json;
+    }
 
-    /// <summary>MIME-тип; не обязателен: тип файла определяется по расширению и содержимому</summary>
-    [JsonPropertyName("media_type")]
-    public string? MediaType { get; init; }
+    /// <summary>Wraps a <see cref="ChatAttachmentData" />.</summary>
+    public ChatAttachment(ChatAttachmentData value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), (JsonElement?)null)
+    {
+    }
 
-    /// <summary>Имя файла с расширением — по нему определяется тип</summary>
-    [JsonPropertyName("name")]
-    public required string Name { get; init; }
+    /// <summary>Wraps a <see cref="ChatAttachmentUpload" />.</summary>
+    public ChatAttachment(ChatAttachmentUpload value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), (JsonElement?)null)
+    {
+    }
 
-    /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
-    [JsonExtensionData]
-    public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
+    /// <summary>The variant held by this value, or null when the variant is unknown to this SDK.</summary>
+    public object? Value { get; }
+
+    /// <summary>The raw JSON of a variant unknown to this SDK; null for known variants.</summary>
+    public JsonElement? Json { get; }
+
+    /// <summary>Whether the variant is unknown to this SDK.</summary>
+    public bool IsUnknown => Value is null;
+
+    /// <summary>The value as <see cref="ChatAttachmentData" />, or null when it is another variant.</summary>
+    public ChatAttachmentData? AsChatAttachmentData => Value as ChatAttachmentData;
+
+    /// <summary>The value as <see cref="ChatAttachmentUpload" />, or null when it is another variant.</summary>
+    public ChatAttachmentUpload? AsChatAttachmentUpload => Value as ChatAttachmentUpload;
+
+    /// <summary>Wraps a <see cref="ChatAttachmentData" />.</summary>
+    public static implicit operator ChatAttachment(ChatAttachmentData value) => new(value);
+
+    /// <summary>Wraps a <see cref="ChatAttachmentUpload" />.</summary>
+    public static implicit operator ChatAttachment(ChatAttachmentUpload value) => new(value);
+
+    /// <inheritdoc />
+    public override string ToString() => Value?.ToString() ?? Json?.GetRawText() ?? "null";
+
+    internal sealed class Converter : JsonConverter<ChatAttachment>
+    {
+        public override ChatAttachment Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            using var document = JsonDocument.ParseValue(ref reader);
+            var root = document.RootElement;
+            if (root.ValueKind == JsonValueKind.Object)
+            {
+                if (root.TryGetProperty("data", out _) && root.TryGetProperty("name", out _))
+                {
+                    return new ChatAttachment(root.Deserialize(TungoJsonContext.For(options).ChatAttachmentData)!, (JsonElement?)null);
+                }
+
+                if (root.TryGetProperty("upload_id", out _))
+                {
+                    return new ChatAttachment(root.Deserialize(TungoJsonContext.For(options).ChatAttachmentUpload)!, (JsonElement?)null);
+                }
+
+            }
+
+            return new ChatAttachment(null, root.Clone());
+        }
+
+        public override void Write(Utf8JsonWriter writer, ChatAttachment value, JsonSerializerOptions options)
+        {
+            switch (value.Value)
+            {
+                case ChatAttachmentData variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatAttachmentData);
+                    break;
+                case ChatAttachmentUpload variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatAttachmentUpload);
+                    break;
+                default:
+                    if (value.Json is { } json)
+                    {
+                        json.WriteTo(writer);
+                    }
+                    else
+                    {
+                        writer.WriteNullValue();
+                    }
+
+                    break;
+            }
+        }
+    }
 }

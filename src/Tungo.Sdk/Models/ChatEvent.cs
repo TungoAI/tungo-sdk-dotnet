@@ -6,7 +6,7 @@ namespace Tungo.Sdk;
 
 /// <summary>Одно событие потока: `id: &lt;номер&gt;`, `event: &lt;type&gt;`, `data: &lt;JSON этого вида&gt;`. Ещё бывает `event: ping` с пустым data — пульс, его пропускайте. Переподключение — GET …/chat/{id}/events с Last-Event-ID.</summary>
 /// <remarks>
-/// One of: <see cref="ChatEventText" />, <see cref="ChatEventProgress" />, <see cref="ChatEventThinking" />, <see cref="ChatEventStatus" />, <see cref="ChatEventTool" />, <see cref="ChatEventProposal" />, <see cref="ChatEventCitation" />, <see cref="ChatEventQuestion" />, <see cref="ChatEventChoice" />, <see cref="ChatEventError" />, <see cref="ChatEventBatch" />, <see cref="ChatEventBatchReport" />, <see cref="ChatEventNext" />, <see cref="ChatEventDone" />, <see cref="ChatEventTitle" />.
+/// One of: <see cref="ChatEventText" />, <see cref="ChatEventProgress" />, <see cref="ChatEventThinking" />, <see cref="ChatEventStatus" />, <see cref="ChatEventTool" />, <see cref="ChatEventProposal" />, <see cref="ChatEventCitation" />, <see cref="ChatEventQuestion" />, <see cref="ChatEventChoice" />, <see cref="ChatEventError" />, <see cref="ChatEventBatch" />, <see cref="ChatEventBatchReport" />, <see cref="ChatEventFile" />, <see cref="ChatEventMemory" />, <see cref="ChatEventNext" />, <see cref="ChatEventDone" />, <see cref="ChatEventTitle" />.
 /// A variant this SDK does not know yet is kept as raw JSON: <see cref="IsUnknown" /> is true and <see cref="Json" /> holds it.
 /// </remarks>
 [JsonConverter(typeof(ChatEvent.Converter))]
@@ -91,6 +91,18 @@ public sealed class ChatEvent
     {
     }
 
+    /// <summary>Wraps a <see cref="ChatEventFile" />.</summary>
+    public ChatEvent(ChatEventFile value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), "file", null)
+    {
+    }
+
+    /// <summary>Wraps a <see cref="ChatEventMemory" />.</summary>
+    public ChatEvent(ChatEventMemory value)
+        : this(value ?? throw new ArgumentNullException(nameof(value)), "memory", null)
+    {
+    }
+
     /// <summary>Wraps a <see cref="ChatEventNext" />.</summary>
     public ChatEvent(ChatEventNext value)
         : this(value ?? throw new ArgumentNullException(nameof(value)), "next", null)
@@ -157,6 +169,12 @@ public sealed class ChatEvent
     /// <summary>The value as <see cref="ChatEventBatchReport" />, or null when it is another variant.</summary>
     public ChatEventBatchReport? AsBatchReport => Value as ChatEventBatchReport;
 
+    /// <summary>The value as <see cref="ChatEventFile" />, or null when it is another variant.</summary>
+    public ChatEventFile? AsFile => Value as ChatEventFile;
+
+    /// <summary>The value as <see cref="ChatEventMemory" />, or null when it is another variant.</summary>
+    public ChatEventMemory? AsMemory => Value as ChatEventMemory;
+
     /// <summary>The value as <see cref="ChatEventNext" />, or null when it is another variant.</summary>
     public ChatEventNext? AsNext => Value as ChatEventNext;
 
@@ -201,6 +219,12 @@ public sealed class ChatEvent
 
     /// <summary>Wraps a <see cref="ChatEventBatchReport" />.</summary>
     public static implicit operator ChatEvent(ChatEventBatchReport value) => new(value);
+
+    /// <summary>Wraps a <see cref="ChatEventFile" />.</summary>
+    public static implicit operator ChatEvent(ChatEventFile value) => new(value);
+
+    /// <summary>Wraps a <see cref="ChatEventMemory" />.</summary>
+    public static implicit operator ChatEvent(ChatEventMemory value) => new(value);
 
     /// <summary>Wraps a <see cref="ChatEventNext" />.</summary>
     public static implicit operator ChatEvent(ChatEventNext value) => new(value);
@@ -252,6 +276,10 @@ public sealed class ChatEvent
                     return new ChatEvent(root.Deserialize(TungoJsonContext.For(options).ChatEventBatch)!, tag, null);
                 case "batch_report":
                     return new ChatEvent(root.Deserialize(TungoJsonContext.For(options).ChatEventBatchReport)!, tag, null);
+                case "file":
+                    return new ChatEvent(root.Deserialize(TungoJsonContext.For(options).ChatEventFile)!, tag, null);
+                case "memory":
+                    return new ChatEvent(root.Deserialize(TungoJsonContext.For(options).ChatEventMemory)!, tag, null);
                 case "next":
                     return new ChatEvent(root.Deserialize(TungoJsonContext.For(options).ChatEventNext)!, tag, null);
                 case "done":
@@ -302,6 +330,12 @@ public sealed class ChatEvent
                     break;
                 case ChatEventBatchReport variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatEventBatchReport);
+                    break;
+                case ChatEventFile variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatEventFile);
+                    break;
+                case ChatEventMemory variant:
+                    JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatEventMemory);
                     break;
                 case ChatEventNext variant:
                     JsonSerializer.Serialize(writer, variant, TungoJsonContext.For(options).ChatEventNext);

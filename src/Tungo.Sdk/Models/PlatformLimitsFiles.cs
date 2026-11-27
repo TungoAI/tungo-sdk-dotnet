@@ -7,6 +7,18 @@ namespace Tungo.Sdk;
 /// <summary>Размеры файлов и тел запросов</summary>
 public sealed record PlatformLimitsFiles
 {
+    /// <summary>Один архив, байт; в attachments_total_bytes не входит. Больше attachment_bytes — только загрузкой по частям (POST …/chat/uploads)</summary>
+    [JsonPropertyName("archive_bytes")]
+    public required long ArchiveBytes { get; init; }
+
+    /// <summary>Файлов в архиве вместе с вложенными архивами</summary>
+    [JsonPropertyName("archive_files")]
+    public required long ArchiveFiles { get; init; }
+
+    /// <summary>Архивов (.zip, .rar, .7z) в одном сообщении</summary>
+    [JsonPropertyName("archives_per_message")]
+    public required long ArchivesPerMessage { get; init; }
+
     /// <summary>Один файл, байт (до кодирования в base64)</summary>
     [JsonPropertyName("attachment_bytes")]
     public required long AttachmentBytes { get; init; }
@@ -42,6 +54,10 @@ public sealed record PlatformLimitsFiles
     /// <summary>Тело остальных запросов, байт; больше — 413 payload_too_large</summary>
     [JsonPropertyName("request_bytes")]
     public required long RequestBytes { get; init; }
+
+    /// <summary>Часть загрузки архива (PUT …/chat/uploads/{upload_id}/parts/{n}), байт; последняя — остаток</summary>
+    [JsonPropertyName("upload_part_bytes")]
+    public required long UploadPartBytes { get; init; }
 
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]

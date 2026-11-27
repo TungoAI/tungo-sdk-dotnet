@@ -49,9 +49,13 @@ public sealed record ChatAssistantMessage
     [JsonPropertyName("state")]
     public required ChatAssistantMessageState State { get; init; }
 
-    /// <summary>Размышления модели за ход одним текстом; пусто — не было</summary>
+    /// <summary>Размышления модели за ход одним текстом; блок не по-русски без перевода — пометкой «Обдумываю…»; пусто — не было</summary>
     [JsonPropertyName("thinking")]
     public required string Thinking { get; init; }
+
+    /// <summary>Те же размышления по блокам: блок не по-русски без перевода — оригиналом с translate_id</summary>
+    [JsonPropertyName("thinking_parts")]
+    public required IReadOnlyList<ChatThinkingPart> ThinkingParts { get; init; }
 
     /// <summary>Номер ответа в разговоре (он же X-Turn-No и средняя часть id): по нему ответ оценивают — PUT …/chat/{id}/messages/{turn}/rating</summary>
     [JsonPropertyName("turn_no")]

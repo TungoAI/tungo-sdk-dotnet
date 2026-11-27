@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Что происходит: - `compacting` — сервер сжимает историю длинного разговора - `escalating` — ответ перепроверяется более сильной моделью — ход займёт дольше - `elsewhere` — ответ готовится на другом сервере Tungo — он поя… A value this SDK does not know yet is preserved as it was sent.</summary>
+/// <summary>Что происходит: - `compacting` — сервер сжимает историю длинного разговора - `escalating` — ответ перепроверяется более сильной моделью — ход займёт дольше - `checking_norm` — ответ сослался на норму, не открыв её: та же… A value this SDK does not know yet is preserved as it was sent.</summary>
 [JsonConverter(typeof(ChatEventStatusCode.Converter))]
 public readonly struct ChatEventStatusCode : IEquatable<ChatEventStatusCode>
 {
@@ -22,6 +22,12 @@ public readonly struct ChatEventStatusCode : IEquatable<ChatEventStatusCode>
     /// <summary><c>escalating</c></summary>
     public static ChatEventStatusCode Escalating { get; } = new("escalating");
 
+    /// <summary><c>checking_norm</c></summary>
+    public static ChatEventStatusCode CheckingNorm { get; } = new("checking_norm");
+
+    /// <summary><c>writing</c></summary>
+    public static ChatEventStatusCode Writing { get; } = new("writing");
+
     /// <summary><c>elsewhere</c></summary>
     public static ChatEventStatusCode Elsewhere { get; } = new("elsewhere");
 
@@ -29,7 +35,7 @@ public readonly struct ChatEventStatusCode : IEquatable<ChatEventStatusCode>
     public string Value => _value ?? string.Empty;
 
     /// <summary>Whether the value is one of those listed by the contract this SDK was generated from.</summary>
-    public bool IsKnown => Value is "compacting" or "escalating" or "elsewhere";
+    public bool IsKnown => Value is "compacting" or "escalating" or "checking_norm" or "writing" or "elsewhere";
 
     /// <summary>Wraps a wire value.</summary>
     public static implicit operator ChatEventStatusCode(string value) => new(value);

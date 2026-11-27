@@ -311,7 +311,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 
 ## Справочник API
 
-Создано из контракта API платформы Tungo: **ресурсов — 13, методов — 90, типов событий вебхуков — 22**.
+Создано из контракта API платформы Tungo: **ресурсов — 15, методов — 100, типов событий вебхуков — 22**.
 
 | Ресурс | Описание | Методы |
 | --- | --- | --- |
@@ -320,7 +320,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 | `client.Platform` | Баланс платформы, книга движений, отчёты о расходе, лимиты, аудит и тарифы моделей | `ListUsageRatesAsync` · `GetAccountAsync` · `GetAuditAsync / GetAuditAllAsync` · `GetLedgerAsync / GetLedgerAllAsync` · `ListLimitsAsync` · `ListRequestsAsync / ListRequestsAllAsync` · `GetUsageAsync` |
 | `client.ApiKeys` | Сведения о текущем ключе API и статистика его расхода | `GetCurrentAsync` · `GetCurrentUsageAsync` · `GetUsageAsync` |
 | `client.Webhooks` | Исходящие вебхуки организации (Svix): адреса, каталог событий, доставки и проверка подписи | `ListEndpointsAsync / ListEndpointsAllAsync` · `CreateEndpointAsync` · `GetEndpointAsync` · `UpdateEndpointAsync` · `DeleteEndpointAsync` · `ListEndpointAttemptsAsync / ListEndpointAttemptsAllAsync` · `RotateEndpointSecretAsync` · `TestEndpointAsync` · `ListEventTypesAsync` · `ListMessagesAsync / ListMessagesAllAsync` · `ListMessageAttemptsAsync / ListMessageAttemptsAllAsync` · `ResendMessageAsync` · `GetUsageAsync` |
-| `client.Chat` | Диалоги с ИИ-бухгалтером: вопросы, потоковый чат (SSE), подсчёт токенов и история | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` |
+| `client.Chat` | Диалоги с ИИ-бухгалтером: вопросы, потоковый чат (SSE), подсчёт токенов и история | `ListAsync / ListAllAsync` · `CreateAsync / CreateStreamAsync` · `CountTokensAsync` · `ListFilesAsync / ListFilesAllAsync` · `ListMentionsAsync` · `GetRatingOptionsAsync` · `ListSuggestionsAsync` · `CreateUploadAsync` · `DeleteUploadAsync` · `PutUploadPartAsync` · `GetAsync` · `UpdateAsync` · `DeleteAsync` · `AnswerAsync / AnswerStreamAsync` · `ListEventsAsync` · `RateMessageAsync` · `DeleteMessageRatingAsync` · `RateAsync` · `DismissRatingAsync` · `StopAsync` · `TranslateThinkingAsync` |
 | `client.Proposals` | Предложения документов ИИ-бухгалтера: просмотр, одобрение записи в 1С и отклонение | `ListAsync / ListAllAsync` · `ApproveBatchAsync` · `GetAsync` · `ApproveAsync` · `RejectAsync` · `RequestApprovalAsync` |
 | `client.Feed` | Лента событий и предложений компании (страницы и живой поток SSE) | `GetAsync / GetAllAsync` · `ListEventsAsync` |
 | `client.Batches` | Пачки обработки банковских выписок, входящих ЭСФ и DirectBank | `ListAsync / ListAllAsync` · `CreateBankStatementAsync` · `CreateEsfPurchasesAsync` · `GetAsync` · `ListEventsAsync` · `StopAsync` · `GetSummaryAsync` · `ListStatementsAsync / ListStatementsAllAsync` · `PollDirectbankAsync` |
@@ -328,6 +328,8 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 | `client.Forms` | Налоговые формы (ФНО 100.00 и др.): сборка, проверка ИСНА и разрывы данных | `ListAsync` · `BuildAsync` · `ListDataGapsAsync` · `GetIsnaAsync` · `ListNotesAsync` |
 | `client.Onec` | Состояние подключения компании к базе 1С | `GetStatusAsync` |
 | `client.Automations` | Автоматизации компании: входящие хуки, сценарии, цепочки шагов, запуски и уровень автономности ИИ | `PostHookAsync` · `ListHooksAsync` · `CreateHookAsync` · `GetHookAsync` · `UpdateHookAsync` · `DeleteHookAsync` · `RotateHookAsync` · `TestHookAsync` · `ListRunsAsync / ListRunsAllAsync` · `GetRunAsync` · `CancelRunAsync` · `RetryRunAsync` · `ListScenariosAsync` · `CreateScenarioAsync` · `GetScenarioAsync` · `PutScenarioAsync` · `UpdateScenarioAsync` · `DeleteScenarioAsync` · `RunScenarioAsync` · `GetStateAsync` · `PutStateAsync` · `GetAutonomyAsync` · `PutAutonomyAsync` |
+| `client.Verification` | Публичная проверка электронной подписи документов Tungo: по коду, по файлу, по блоку QR и ключи подписи (без ключа API) | `ListKeysAsync` · `VerifyQrAsync` · `GetAsync` · `CheckAsync` |
+| `client.Releases` | Публичный список загрузок: расширение 1С и Tungo Connector (без ключа API) | `ListAsync` |
 
 ## Другие SDK
 
@@ -348,7 +350,7 @@ Console.WriteLine($"{tiyn} {fromDecimal} {tenge} {text} {valid}");
 
 ## Версии и поддержка
 
-Библиотека следует [семантическому версионированию](https://semver.org/lang/ru/). Пока старшая версия равна 0, промежуточный выпуск может содержать несовместимые изменения; они всегда перечислены в [истории изменений](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). Этот README описывает версию 0.3.1.
+Библиотека следует [семантическому версионированию](https://semver.org/lang/ru/). Промежуточные и исправляющие выпуски совместимы: API растёт добавлениями, а поле или метод, которые уйдут, сначала помечаются устаревшими и живут не меньше шести месяцев. Несовместимые изменения бывают только в новой старшей версии и перечислены, с указаниями по переходу, в [истории изменений](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/CHANGELOG.md). Этот README описывает версию 1.0.0.
 
 Код создаётся генератором: пишите о проблемах и идеях в [обращения](https://github.com/TungoAI/tungo-sdk-dotnet/issues), а не присылайте правки к созданным файлам. Об уязвимости сообщайте по [политике безопасности](https://github.com/TungoAI/tungo-sdk-dotnet/blob/main/SECURITY.md).
 

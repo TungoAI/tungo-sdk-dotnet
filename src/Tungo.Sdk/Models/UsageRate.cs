@@ -27,6 +27,11 @@ public sealed record UsageRate
     [JsonPropertyName("input_per_mtok_tiyn")]
     public required long InputPerMtokTiyn { get; init; }
 
+    /// <summary>Длинный контекст: если вход вызова вместе с кэшем длиннее above_tokens, весь вызов считается по этим ценам (как в прайсе провайдера); null — у модели одна цена</summary>
+    [JsonPropertyName("long_context")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required UsageRateLongContext? LongContext { get; init; }
+
     /// <summary>Модель ИИ: tungo-1-flash, tungo-1, tungo-1-deep (tungo-search — поиск по нормам, tungo-legacy — прежняя)</summary>
     [JsonPropertyName("model")]
     public required string Model { get; init; }
@@ -38,6 +43,10 @@ public sealed record UsageRate
     /// <summary>Название модели для людей</summary>
     [JsonPropertyName("title")]
     public required string Title { get; init; }
+
+    /// <summary>Цена 1000 запросов поиска на официальных сайтах РК (когда нормы нет в базе знаний); 0 — модель не ищет в интернете в тиынах (1 ₸ = 100 тиын; показывать значение / 100 ₸)</summary>
+    [JsonPropertyName("web_search_per_1k_tiyn")]
+    public required long WebSearchPer1kTiyn { get; init; }
 
     /// <summary>Properties that are not part of the contract this SDK was generated from; they are kept and written back.</summary>
     [JsonExtensionData]

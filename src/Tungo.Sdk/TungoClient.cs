@@ -74,6 +74,8 @@ public sealed class TungoClient : IDisposable
         Forms = new FormsResource(this);
         Onec = new OnecResource(this);
         Automations = new AutomationsResource(this);
+        Verification = new VerificationResource(this);
+        Releases = new ReleasesResource(this);
     }
 
     /// <summary>The base address requests are sent to.</summary>
@@ -123,6 +125,12 @@ public sealed class TungoClient : IDisposable
 
     /// <summary>Автоматизации компании: входящие хуки, сценарии, цепочки шагов, запуски и уровень автономности ИИ</summary>
     public AutomationsResource Automations { get; }
+
+    /// <summary>Публичная проверка электронной подписи документов Tungo: по коду, по файлу, по блоку QR и ключи подписи (без ключа API)</summary>
+    public VerificationResource Verification { get; }
+
+    /// <summary>Публичный список загрузок: расширение 1С и Tungo Connector (без ключа API)</summary>
+    public ReleasesResource Releases { get; }
 
     internal TungoTransport Transport { get; }
 

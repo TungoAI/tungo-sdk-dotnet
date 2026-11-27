@@ -7,7 +7,11 @@ namespace Tungo.Sdk;
 /// <summary>Служебное состояние хода без текста ответа</summary>
 public sealed record ChatEventStatus
 {
-    /// <summary>Что происходит: - `compacting` — сервер сжимает историю длинного разговора - `escalating` — ответ перепроверяется более сильной моделью — ход займёт дольше - `elsewhere` — ответ готовится на другом сервере Tungo — он поя…</summary>
+    /// <summary>Только у code = writing: сколько знаков ответа уже написано (не убывает в пределах одного ответа). Текста ответа в событии нет — он придёт событием text</summary>
+    [JsonPropertyName("chars")]
+    public long? Chars { get; init; }
+
+    /// <summary>Что происходит: - `compacting` — сервер сжимает историю длинного разговора - `escalating` — ответ перепроверяется более сильной моделью — ход займёт дольше - `checking_norm` — ответ сослался на норму, не открыв её: та же…</summary>
     [JsonPropertyName("code")]
     public ChatEventStatusCode? Code { get; init; }
 

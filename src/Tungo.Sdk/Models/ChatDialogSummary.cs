@@ -11,6 +11,10 @@ public sealed record ChatDialogSummary
     [JsonPropertyName("id")]
     public required string Id { get; init; }
 
+    /// <summary>false — разговор «без памяти»</summary>
+    [JsonPropertyName("memory")]
+    public required bool Memory { get; init; }
+
     /// <summary>Сколько сообщений в разговоре (вопросы и ответы)</summary>
     [JsonPropertyName("message_count")]
     public required double MessageCount { get; init; }

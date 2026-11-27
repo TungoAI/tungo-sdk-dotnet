@@ -91,6 +91,33 @@ public sealed class ChatResource
         return value;
     }
 
+    private TungoRequest ListFilesRequest(ChatListFilesParams? parameters, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/files", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/files", TungoAuth.ApiKey);
+        var query = new QueryBuilder();
+        query.Add("cursor", parameters?.Cursor);
+        query.Add("dialog_id", parameters?.DialogId);
+        query.Add("format", parameters?.Format?.Value);
+        query.Add("limit", parameters?.Limit);
+        query.Add("q", parameters?.Q);
+        request.Query = query.ToString();
+        return request;
+    }
+
+    /// <summary>Файлы от ИИ в своих разговорах, новые сверху. Returns one page (GET /v1/companies/{co}/chat/files).</summary>
+    public async Task<Page<ChatFileItem, ChatFileList>> ListFilesAsync(ChatListFilesParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = ListFilesRequest(parameters, options);
+        var (value, response) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatFileList, options, cancellationToken).ConfigureAwait(false);
+        return new Page<ChatFileItem, ChatFileList>(value, value.Data, value.NextCursor, parameters?.Cursor, response, (cursor, token) => ListFilesAsync((parameters ?? new ChatListFilesParams()) with { Cursor = cursor }, options, token));
+    }
+
+    /// <summary>Файлы от ИИ в своих разговорах, новые сверху. Iterates over every item, requesting the next page only when it is needed (GET /v1/companies/{co}/chat/files).</summary>
+    public IAsyncEnumerable<ChatFileItem> ListFilesAllAsync(ChatListFilesParams? parameters = null, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        return Paginator.EnumerateAsync(token => ListFilesAsync(parameters, options, token), cancellationToken);
+    }
+
     private TungoRequest ListMentionsRequest(ChatListMentionsParams? parameters, RequestOptions? options)
     {
         var request = new TungoRequest(HttpMethod.Get, "/v1/companies/{co}/chat/mentions", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/mentions", TungoAuth.ApiKey);
@@ -141,6 +168,53 @@ public sealed class ChatResource
     {
         var request = ListSuggestionsRequest(parameters, options);
         var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatSuggestions, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest CreateUploadRequest(ChatUploadCreate body, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Post, "/v1/companies/{co}/chat/uploads", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/uploads", TungoAuth.ApiKey);
+        request.SetJsonBody(body, TungoJsonContext.Shared.ChatUploadCreate);
+        return request;
+    }
+
+    /// <summary>Начать загрузку архива к сообщению (POST /v1/companies/{co}/chat/uploads).</summary>
+    public async Task<ChatUpload> CreateUploadAsync(ChatUploadCreate body, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        if (body is null)
+        {
+            throw new ArgumentNullException(nameof(body));
+        }
+
+        var request = CreateUploadRequest(body, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatUpload, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest DeleteUploadRequest(string upload, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Delete, "/v1/companies/{co}/chat/uploads/{upload}", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/uploads/" + TungoPath.Segment(upload, nameof(upload)), TungoAuth.ApiKey);
+        return request;
+    }
+
+    /// <summary>Отменить загрузку архива (DELETE /v1/companies/{co}/chat/uploads/{upload}).</summary>
+    public async Task DeleteUploadAsync(string upload, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = DeleteUploadRequest(upload, options);
+        await _client.Transport.SendAsync(request, options, cancellationToken).ConfigureAwait(false);
+    }
+
+    private TungoRequest PutUploadPartRequest(string upload, string n, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Put, "/v1/companies/{co}/chat/uploads/{upload}/parts/{n}", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/uploads/" + TungoPath.Segment(upload, nameof(upload)) + "/parts/" + TungoPath.Segment(n, nameof(n)), TungoAuth.ApiKey);
+        return request;
+    }
+
+    /// <summary>Часть архива (PUT /v1/companies/{co}/chat/uploads/{upload}/parts/{n}).</summary>
+    public async Task<ChatUploadPart> PutUploadPartAsync(string upload, string n, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = PutUploadPartRequest(upload, n, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatUploadPart, options, cancellationToken).ConfigureAwait(false);
         return value;
     }
 
@@ -320,6 +394,20 @@ public sealed class ChatResource
     {
         var request = StopRequest(id, options);
         var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatStopResult, options, cancellationToken).ConfigureAwait(false);
+        return value;
+    }
+
+    private TungoRequest TranslateThinkingRequest(string id, string tid, RequestOptions? options)
+    {
+        var request = new TungoRequest(HttpMethod.Post, "/v1/companies/{co}/chat/{id}/thinking/{tid}/translate", "/v1/companies/" + TungoPath.Segment(_client.ResolveCompanyId(options), "companyId") + "/chat/" + TungoPath.Segment(id, nameof(id)) + "/thinking/" + TungoPath.Segment(tid, nameof(tid)) + "/translate", TungoAuth.ApiKey);
+        return request;
+    }
+
+    /// <summary>Перевести размышление на русский (POST /v1/companies/{co}/chat/{id}/thinking/{tid}/translate).</summary>
+    public async Task<ChatThinkingTranslation> TranslateThinkingAsync(string id, string tid, RequestOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        var request = TranslateThinkingRequest(id, tid, options);
+        var (value, _) = await _client.Transport.SendAsync(request, TungoJsonContext.Shared.ChatThinkingTranslation, options, cancellationToken).ConfigureAwait(false);
         return value;
     }
 }

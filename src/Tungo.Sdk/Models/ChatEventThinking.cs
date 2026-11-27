@@ -4,12 +4,20 @@ using System.Text.Json.Serialization;
 
 namespace Tungo.Sdk;
 
-/// <summary>Размышление модели (по-русски), кусками — можно показать свёрнутым блоком</summary>
+/// <summary>Размышление модели кусками — можно показать свёрнутым блоком. Блок не по-русски приходит целиком в конце блока: original и translate_id</summary>
 public sealed record ChatEventThinking
 {
-    /// <summary>Новый кусок размышления</summary>
+    /// <summary>Новый кусок размышления по-русски; у блока не по-русски — пометка «Обдумываю…» (пусто, если она уже стоит)</summary>
     [JsonPropertyName("delta")]
     public required string Delta { get; init; }
+
+    /// <summary>Блок не по-русски целиком, как его написала модель</summary>
+    [JsonPropertyName("original")]
+    public string? Original { get; init; }
+
+    /// <summary>id блока для перевода: POST …/chat/{id}/thinking/{translate_id}/translate — после ответа, когда человек раскрыл шаги</summary>
+    [JsonPropertyName("translate_id")]
+    public string? TranslateId { get; init; }
 
     /// <summary>Вид события: thinking</summary>
     [JsonPropertyName("type")]

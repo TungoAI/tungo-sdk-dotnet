@@ -7,7 +7,7 @@ namespace Tungo.Sdk;
 /// <summary>Вопрос ИИ-бухгалтеру</summary>
 public sealed record ChatMessageRequest
 {
-    /// <summary>Файлы к вопросу. До 5 файлов, каждый до 10 МБ, все вместе до 14 МБ (до кодирования в base64). Картинка — до 5 МБ, PDF — до 100 страниц. Форматы (по расширению имени): .pdf, .jpg, .jpeg, .png, .webp, .docx, .xlsx, .xls, .…</summary>
+    /// <summary>Файлы к вопросу. До 5 файлов, каждый до 10 МБ, все вместе до 14 МБ (до кодирования в base64). Картинка — до 5 МБ, PDF — до 100 страниц. Форматы (по расширению имени): .pdf, .jpg, .jpeg, .png, .webp, .svg, .docx, .doc, .x…</summary>
     [JsonPropertyName("attachments")]
     public IReadOnlyList<ChatAttachment>? Attachments { get; init; }
 
@@ -26,6 +26,10 @@ public sealed record ChatMessageRequest
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     [JsonConverter(typeof(OptionalJsonConverter<ChatMessageRequestEffort?>))]
     public Optional<ChatMessageRequestEffort?> Effort { get; init; }
+
+    /// <summary>false — разговор «без памяти»: ИИ не видит, что запомнил раньше, ничего не запоминает и не ищет по прошлым разговорам, а сам разговор не попадает в поиск. Действует только в первом сообщении нового разговора и не меняетс…</summary>
+    [JsonPropertyName("memory")]
+    public bool? Memory { get; init; }
 
     /// <summary>Упоминания через «@» в этом вопросе, до 10: ИИ получит их вместе с вопросом. Каждое проверяется на доступ: нет объекта в этой компании или нет права его видеть — 404 (error.code = mention_not_found, error.index — номер в…</summary>
     [JsonPropertyName("mentions")]

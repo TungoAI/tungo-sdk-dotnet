@@ -17,30 +17,18 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(AutomationScenarioInputAutoApprove))]
 [JsonSerializable(typeof(ChatMessageRequestEffort?))]
 [JsonSerializable(typeof(IReadOnlyDictionary<string, AutomationOutputField>))]
-[JsonSerializable(typeof(IReadOnlyList<ApiKeyCreateWriteKindItem>))]
-[JsonSerializable(typeof(IReadOnlyList<ApiKeyPatchWriteKindItem>))]
 [JsonSerializable(typeof(IReadOnlyList<string>))]
 [JsonSerializable(typeof(long?))]
 [JsonSerializable(typeof(ApiKey))]
-[JsonSerializable(typeof(ApiKeyCreate))]
-[JsonSerializable(typeof(ApiKeyCreated))]
-[JsonSerializable(typeof(ApiKeyDetails))]
 [JsonSerializable(typeof(ApiKeyMonth))]
-[JsonSerializable(typeof(ApiKeyPatch))]
-[JsonSerializable(typeof(ApiKeyPerson))]
-[JsonSerializable(typeof(ApiKeyRoll))]
-[JsonSerializable(typeof(ApiKeyRolled))]
 [JsonSerializable(typeof(ApiKeySelf))]
 [JsonSerializable(typeof(ApiKeySelfRateLimit))]
 [JsonSerializable(typeof(ApiKeySelfWorkspace))]
-[JsonSerializable(typeof(ApiKeyTransfer))]
-[JsonSerializable(typeof(ApiKeyUpdated))]
 [JsonSerializable(typeof(ApiKeyUsage))]
 [JsonSerializable(typeof(ApiKeyUsageByCompanyItem))]
 [JsonSerializable(typeof(ApiKeyUsageByDayItem))]
 [JsonSerializable(typeof(ApiKeyUsageByModelItem))]
 [JsonSerializable(typeof(ApiKeyUsageTotals))]
-[JsonSerializable(typeof(ApiKeyWarning))]
 [JsonSerializable(typeof(ApproveBatchCompanyProposalsResponse))]
 [JsonSerializable(typeof(ApproveError))]
 [JsonSerializable(typeof(ApproveErrorError))]
@@ -128,12 +116,12 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(BatchSummaryApproveBody))]
 [JsonSerializable(typeof(BatchSummaryProposal))]
 [JsonSerializable(typeof(BatchSummaryTotals))]
-[JsonSerializable(typeof(CardSession))]
-[JsonSerializable(typeof(CardSessionState))]
 [JsonSerializable(typeof(ChatAnswerRequest))]
 [JsonSerializable(typeof(ChatAssistantMessage))]
 [JsonSerializable(typeof(ChatAttachment))]
+[JsonSerializable(typeof(ChatAttachmentData))]
 [JsonSerializable(typeof(ChatAttachmentMeta))]
+[JsonSerializable(typeof(ChatAttachmentUpload))]
 [JsonSerializable(typeof(ChatChoiceAnswer))]
 [JsonSerializable(typeof(ChatChoiceOption))]
 [JsonSerializable(typeof(ChatChoiceQuestion))]
@@ -155,6 +143,8 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatEventCitation))]
 [JsonSerializable(typeof(ChatEventDone))]
 [JsonSerializable(typeof(ChatEventError))]
+[JsonSerializable(typeof(ChatEventFile))]
+[JsonSerializable(typeof(ChatEventMemory))]
 [JsonSerializable(typeof(ChatEventNext))]
 [JsonSerializable(typeof(ChatEventProgress))]
 [JsonSerializable(typeof(ChatEventProposal))]
@@ -164,9 +154,13 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatEventThinking))]
 [JsonSerializable(typeof(ChatEventTitle))]
 [JsonSerializable(typeof(ChatEventTool))]
+[JsonSerializable(typeof(ChatFileItem))]
+[JsonSerializable(typeof(ChatFileList))]
 [JsonSerializable(typeof(ChatHistoryBatch))]
 [JsonSerializable(typeof(ChatHistoryBlock))]
 [JsonSerializable(typeof(ChatHistoryError))]
+[JsonSerializable(typeof(ChatHistoryFile))]
+[JsonSerializable(typeof(ChatHistoryMemory))]
 [JsonSerializable(typeof(ChatHistoryMention))]
 [JsonSerializable(typeof(ChatHistoryProposal))]
 [JsonSerializable(typeof(ChatHistoryQuestion))]
@@ -184,6 +178,7 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatMessageRequest))]
 [JsonSerializable(typeof(ChatNextAction))]
 [JsonSerializable(typeof(ChatNextActionParamsValue))]
+[JsonSerializable(typeof(ChatOnecObject))]
 [JsonSerializable(typeof(ChatPendingQuestion))]
 [JsonSerializable(typeof(ChatQuestion))]
 [JsonSerializable(typeof(ChatRatingDismissed))]
@@ -194,12 +189,18 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ChatSuggestion))]
 [JsonSerializable(typeof(ChatSuggestionGroup))]
 [JsonSerializable(typeof(ChatSuggestions))]
+[JsonSerializable(typeof(ChatThinkingPart))]
+[JsonSerializable(typeof(ChatThinkingTranslation))]
 [JsonSerializable(typeof(ChatTokenCount))]
 [JsonSerializable(typeof(ChatTokenCountRequest))]
 [JsonSerializable(typeof(ChatTurnError))]
+[JsonSerializable(typeof(ChatTurnFile))]
 [JsonSerializable(typeof(ChatTurnProposal))]
 [JsonSerializable(typeof(ChatTurnResult))]
 [JsonSerializable(typeof(ChatTurnUsage))]
+[JsonSerializable(typeof(ChatUpload))]
+[JsonSerializable(typeof(ChatUploadCreate))]
+[JsonSerializable(typeof(ChatUploadPart))]
 [JsonSerializable(typeof(ChatUsage))]
 [JsonSerializable(typeof(ChatUserMessage))]
 [JsonSerializable(typeof(Company))]
@@ -218,7 +219,11 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(DataGaps))]
 [JsonSerializable(typeof(DataGapsSummary))]
 [JsonSerializable(typeof(DirectBankPollResult))]
-[JsonSerializable(typeof(EpayReturnLinks))]
+[JsonSerializable(typeof(DownloadConnector))]
+[JsonSerializable(typeof(DownloadConnectorFile))]
+[JsonSerializable(typeof(DownloadFile))]
+[JsonSerializable(typeof(DownloadOnecExtension))]
+[JsonSerializable(typeof(Downloads))]
 [JsonSerializable(typeof(Error))]
 [JsonSerializable(typeof(ErrorDetail))]
 [JsonSerializable(typeof(EsfIncomingItem))]
@@ -271,8 +276,6 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(OneCCapability))]
 [JsonSerializable(typeof(OneCStatus))]
 [JsonSerializable(typeof(OneCStatusLastCheck))]
-[JsonSerializable(typeof(PayForm))]
-[JsonSerializable(typeof(PaymentMethod))]
 [JsonSerializable(typeof(PlatformAccount))]
 [JsonSerializable(typeof(PlatformAccountPurchaseLimits))]
 [JsonSerializable(typeof(PlatformAutoReload))]
@@ -284,11 +287,7 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(PlatformLimitsRate))]
 [JsonSerializable(typeof(PlatformLimitsRateKey))]
 [JsonSerializable(typeof(PlatformLimitsRateWorkspace))]
-[JsonSerializable(typeof(PlatformPurchase))]
-[JsonSerializable(typeof(PlatformPurchaseInput))]
 [JsonSerializable(typeof(PlatformRequest))]
-[JsonSerializable(typeof(PlatformSettingsInput))]
-[JsonSerializable(typeof(PlatformSettingsInputAutoReload))]
 [JsonSerializable(typeof(PlatformUsage))]
 [JsonSerializable(typeof(PlatformUsageByCompanyItem))]
 [JsonSerializable(typeof(PlatformUsageByDayItem))]
@@ -320,6 +319,10 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(ProposalPosting))]
 [JsonSerializable(typeof(ProposalResult))]
 [JsonSerializable(typeof(ProposalSource))]
+[JsonSerializable(typeof(PublicVerification))]
+[JsonSerializable(typeof(PublicVerificationReplacedBy))]
+[JsonSerializable(typeof(PublicVerificationSeller))]
+[JsonSerializable(typeof(PublicVerifySignature))]
 [JsonSerializable(typeof(RejectRequest))]
 [JsonSerializable(typeof(StatementDay))]
 [JsonSerializable(typeof(StatementDayCounts))]
@@ -342,6 +345,13 @@ namespace Tungo.Sdk;
 [JsonSerializable(typeof(TaxFormsYear))]
 [JsonSerializable(typeof(TaxPeriodRef))]
 [JsonSerializable(typeof(UsageRate))]
+[JsonSerializable(typeof(UsageRateLongContext))]
+[JsonSerializable(typeof(VerifyCheck))]
+[JsonSerializable(typeof(VerifyCheckInput))]
+[JsonSerializable(typeof(VerifyKey))]
+[JsonSerializable(typeof(VerifyKeys))]
+[JsonSerializable(typeof(VerifyQrInput))]
+[JsonSerializable(typeof(VerifyQrResult))]
 [JsonSerializable(typeof(WebhookAttempt))]
 [JsonSerializable(typeof(WebhookEndpoint))]
 [JsonSerializable(typeof(WebhookEndpointCreate))]
@@ -458,31 +468,13 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ApiKey> ApiKey => Get<ApiKey>();
 
-    internal JsonTypeInfo<ApiKeyCreate> ApiKeyCreate => Get<ApiKeyCreate>();
-
-    internal JsonTypeInfo<ApiKeyCreated> ApiKeyCreated => Get<ApiKeyCreated>();
-
-    internal JsonTypeInfo<ApiKeyDetails> ApiKeyDetails => Get<ApiKeyDetails>();
-
     internal JsonTypeInfo<ApiKeyMonth> ApiKeyMonth => Get<ApiKeyMonth>();
-
-    internal JsonTypeInfo<ApiKeyPatch> ApiKeyPatch => Get<ApiKeyPatch>();
-
-    internal JsonTypeInfo<ApiKeyPerson> ApiKeyPerson => Get<ApiKeyPerson>();
-
-    internal JsonTypeInfo<ApiKeyRoll> ApiKeyRoll => Get<ApiKeyRoll>();
-
-    internal JsonTypeInfo<ApiKeyRolled> ApiKeyRolled => Get<ApiKeyRolled>();
 
     internal JsonTypeInfo<ApiKeySelf> ApiKeySelf => Get<ApiKeySelf>();
 
     internal JsonTypeInfo<ApiKeySelfRateLimit> ApiKeySelfRateLimit => Get<ApiKeySelfRateLimit>();
 
     internal JsonTypeInfo<ApiKeySelfWorkspace> ApiKeySelfWorkspace => Get<ApiKeySelfWorkspace>();
-
-    internal JsonTypeInfo<ApiKeyTransfer> ApiKeyTransfer => Get<ApiKeyTransfer>();
-
-    internal JsonTypeInfo<ApiKeyUpdated> ApiKeyUpdated => Get<ApiKeyUpdated>();
 
     internal JsonTypeInfo<ApiKeyUsage> ApiKeyUsage => Get<ApiKeyUsage>();
 
@@ -493,8 +485,6 @@ internal sealed class TungoJsonContext
     internal JsonTypeInfo<ApiKeyUsageByModelItem> ApiKeyUsageByModelItem => Get<ApiKeyUsageByModelItem>();
 
     internal JsonTypeInfo<ApiKeyUsageTotals> ApiKeyUsageTotals => Get<ApiKeyUsageTotals>();
-
-    internal JsonTypeInfo<ApiKeyWarning> ApiKeyWarning => Get<ApiKeyWarning>();
 
     internal JsonTypeInfo<ApproveBatchCompanyProposalsResponse> ApproveBatchCompanyProposalsResponse => Get<ApproveBatchCompanyProposalsResponse>();
 
@@ -670,17 +660,17 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<BatchSummaryTotals> BatchSummaryTotals => Get<BatchSummaryTotals>();
 
-    internal JsonTypeInfo<CardSession> CardSession => Get<CardSession>();
-
-    internal JsonTypeInfo<CardSessionState> CardSessionState => Get<CardSessionState>();
-
     internal JsonTypeInfo<ChatAnswerRequest> ChatAnswerRequest => Get<ChatAnswerRequest>();
 
     internal JsonTypeInfo<ChatAssistantMessage> ChatAssistantMessage => Get<ChatAssistantMessage>();
 
     internal JsonTypeInfo<ChatAttachment> ChatAttachment => Get<ChatAttachment>();
 
+    internal JsonTypeInfo<ChatAttachmentData> ChatAttachmentData => Get<ChatAttachmentData>();
+
     internal JsonTypeInfo<ChatAttachmentMeta> ChatAttachmentMeta => Get<ChatAttachmentMeta>();
+
+    internal JsonTypeInfo<ChatAttachmentUpload> ChatAttachmentUpload => Get<ChatAttachmentUpload>();
 
     internal JsonTypeInfo<ChatChoiceAnswer> ChatChoiceAnswer => Get<ChatChoiceAnswer>();
 
@@ -724,6 +714,10 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatEventError> ChatEventError => Get<ChatEventError>();
 
+    internal JsonTypeInfo<ChatEventFile> ChatEventFile => Get<ChatEventFile>();
+
+    internal JsonTypeInfo<ChatEventMemory> ChatEventMemory => Get<ChatEventMemory>();
+
     internal JsonTypeInfo<ChatEventNext> ChatEventNext => Get<ChatEventNext>();
 
     internal JsonTypeInfo<ChatEventProgress> ChatEventProgress => Get<ChatEventProgress>();
@@ -742,11 +736,19 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatEventTool> ChatEventTool => Get<ChatEventTool>();
 
+    internal JsonTypeInfo<ChatFileItem> ChatFileItem => Get<ChatFileItem>();
+
+    internal JsonTypeInfo<ChatFileList> ChatFileList => Get<ChatFileList>();
+
     internal JsonTypeInfo<ChatHistoryBatch> ChatHistoryBatch => Get<ChatHistoryBatch>();
 
     internal JsonTypeInfo<ChatHistoryBlock> ChatHistoryBlock => Get<ChatHistoryBlock>();
 
     internal JsonTypeInfo<ChatHistoryError> ChatHistoryError => Get<ChatHistoryError>();
+
+    internal JsonTypeInfo<ChatHistoryFile> ChatHistoryFile => Get<ChatHistoryFile>();
+
+    internal JsonTypeInfo<ChatHistoryMemory> ChatHistoryMemory => Get<ChatHistoryMemory>();
 
     internal JsonTypeInfo<ChatHistoryMention> ChatHistoryMention => Get<ChatHistoryMention>();
 
@@ -782,6 +784,8 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatNextActionParamsValue> ChatNextActionParamsValue => Get<ChatNextActionParamsValue>();
 
+    internal JsonTypeInfo<ChatOnecObject> ChatOnecObject => Get<ChatOnecObject>();
+
     internal JsonTypeInfo<ChatPendingQuestion> ChatPendingQuestion => Get<ChatPendingQuestion>();
 
     internal JsonTypeInfo<ChatQuestion> ChatQuestion => Get<ChatQuestion>();
@@ -802,17 +806,29 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ChatSuggestions> ChatSuggestions => Get<ChatSuggestions>();
 
+    internal JsonTypeInfo<ChatThinkingPart> ChatThinkingPart => Get<ChatThinkingPart>();
+
+    internal JsonTypeInfo<ChatThinkingTranslation> ChatThinkingTranslation => Get<ChatThinkingTranslation>();
+
     internal JsonTypeInfo<ChatTokenCount> ChatTokenCount => Get<ChatTokenCount>();
 
     internal JsonTypeInfo<ChatTokenCountRequest> ChatTokenCountRequest => Get<ChatTokenCountRequest>();
 
     internal JsonTypeInfo<ChatTurnError> ChatTurnError => Get<ChatTurnError>();
 
+    internal JsonTypeInfo<ChatTurnFile> ChatTurnFile => Get<ChatTurnFile>();
+
     internal JsonTypeInfo<ChatTurnProposal> ChatTurnProposal => Get<ChatTurnProposal>();
 
     internal JsonTypeInfo<ChatTurnResult> ChatTurnResult => Get<ChatTurnResult>();
 
     internal JsonTypeInfo<ChatTurnUsage> ChatTurnUsage => Get<ChatTurnUsage>();
+
+    internal JsonTypeInfo<ChatUpload> ChatUpload => Get<ChatUpload>();
+
+    internal JsonTypeInfo<ChatUploadCreate> ChatUploadCreate => Get<ChatUploadCreate>();
+
+    internal JsonTypeInfo<ChatUploadPart> ChatUploadPart => Get<ChatUploadPart>();
 
     internal JsonTypeInfo<ChatUsage> ChatUsage => Get<ChatUsage>();
 
@@ -850,7 +866,15 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<DirectBankPollResult> DirectBankPollResult => Get<DirectBankPollResult>();
 
-    internal JsonTypeInfo<EpayReturnLinks> EpayReturnLinks => Get<EpayReturnLinks>();
+    internal JsonTypeInfo<DownloadConnector> DownloadConnector => Get<DownloadConnector>();
+
+    internal JsonTypeInfo<DownloadConnectorFile> DownloadConnectorFile => Get<DownloadConnectorFile>();
+
+    internal JsonTypeInfo<DownloadFile> DownloadFile => Get<DownloadFile>();
+
+    internal JsonTypeInfo<DownloadOnecExtension> DownloadOnecExtension => Get<DownloadOnecExtension>();
+
+    internal JsonTypeInfo<Downloads> Downloads => Get<Downloads>();
 
     internal JsonTypeInfo<Error> Error => Get<Error>();
 
@@ -956,10 +980,6 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<OneCStatusLastCheck> OneCStatusLastCheck => Get<OneCStatusLastCheck>();
 
-    internal JsonTypeInfo<PayForm> PayForm => Get<PayForm>();
-
-    internal JsonTypeInfo<PaymentMethod> PaymentMethod => Get<PaymentMethod>();
-
     internal JsonTypeInfo<PlatformAccount> PlatformAccount => Get<PlatformAccount>();
 
     internal JsonTypeInfo<PlatformAccountPurchaseLimits> PlatformAccountPurchaseLimits => Get<PlatformAccountPurchaseLimits>();
@@ -982,15 +1002,7 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<PlatformLimitsRateWorkspace> PlatformLimitsRateWorkspace => Get<PlatformLimitsRateWorkspace>();
 
-    internal JsonTypeInfo<PlatformPurchase> PlatformPurchase => Get<PlatformPurchase>();
-
-    internal JsonTypeInfo<PlatformPurchaseInput> PlatformPurchaseInput => Get<PlatformPurchaseInput>();
-
     internal JsonTypeInfo<PlatformRequest> PlatformRequest => Get<PlatformRequest>();
-
-    internal JsonTypeInfo<PlatformSettingsInput> PlatformSettingsInput => Get<PlatformSettingsInput>();
-
-    internal JsonTypeInfo<PlatformSettingsInputAutoReload> PlatformSettingsInputAutoReload => Get<PlatformSettingsInputAutoReload>();
 
     internal JsonTypeInfo<PlatformUsage> PlatformUsage => Get<PlatformUsage>();
 
@@ -1054,6 +1066,14 @@ internal sealed class TungoJsonContext
 
     internal JsonTypeInfo<ProposalSource> ProposalSource => Get<ProposalSource>();
 
+    internal JsonTypeInfo<PublicVerification> PublicVerification => Get<PublicVerification>();
+
+    internal JsonTypeInfo<PublicVerificationReplacedBy> PublicVerificationReplacedBy => Get<PublicVerificationReplacedBy>();
+
+    internal JsonTypeInfo<PublicVerificationSeller> PublicVerificationSeller => Get<PublicVerificationSeller>();
+
+    internal JsonTypeInfo<PublicVerifySignature> PublicVerifySignature => Get<PublicVerifySignature>();
+
     internal JsonTypeInfo<RejectRequest> RejectRequest => Get<RejectRequest>();
 
     internal JsonTypeInfo<StatementDay> StatementDay => Get<StatementDay>();
@@ -1097,6 +1117,20 @@ internal sealed class TungoJsonContext
     internal JsonTypeInfo<TaxPeriodRef> TaxPeriodRef => Get<TaxPeriodRef>();
 
     internal JsonTypeInfo<UsageRate> UsageRate => Get<UsageRate>();
+
+    internal JsonTypeInfo<UsageRateLongContext> UsageRateLongContext => Get<UsageRateLongContext>();
+
+    internal JsonTypeInfo<VerifyCheck> VerifyCheck => Get<VerifyCheck>();
+
+    internal JsonTypeInfo<VerifyCheckInput> VerifyCheckInput => Get<VerifyCheckInput>();
+
+    internal JsonTypeInfo<VerifyKey> VerifyKey => Get<VerifyKey>();
+
+    internal JsonTypeInfo<VerifyKeys> VerifyKeys => Get<VerifyKeys>();
+
+    internal JsonTypeInfo<VerifyQrInput> VerifyQrInput => Get<VerifyQrInput>();
+
+    internal JsonTypeInfo<VerifyQrResult> VerifyQrResult => Get<VerifyQrResult>();
 
     internal JsonTypeInfo<WebhookAttempt> WebhookAttempt => Get<WebhookAttempt>();
 

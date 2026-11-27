@@ -27,6 +27,10 @@ public sealed record ChatDialog
     [JsonPropertyName("masked")]
     public required double Masked { get; init; }
 
+    /// <summary>false — разговор «без памяти» (выбран при создании): без памяти ИИ и поиска по прошлым разговорам — показать пометку в шапке</summary>
+    [JsonPropertyName("memory")]
+    public required bool Memory { get; init; }
+
     /// <summary>Сколько сообщений в messages</summary>
     [JsonPropertyName("message_count")]
     public required double MessageCount { get; init; }

@@ -11,9 +11,10 @@ public sealed record AutomationTriggerHook
     [JsonPropertyName("filter")]
     public AutomationEventFilter? Filter { get; init; }
 
-    /// <summary>Хук, события которого запускают сценарий (hk_…)</summary>
+    /// <summary>Хук, события которого запускают сценарий; null — хук удалён: событиями сценарий больше не запускается, пока ему не назначат другой хук (PUT …/scenarios/{id}) (hk_…)</summary>
     [JsonPropertyName("hook_id")]
-    public required string HookId { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public required string? HookId { get; init; }
 
     /// <summary>`hook` — по событию хука</summary>
     [JsonPropertyName("kind")]
